@@ -1,0 +1,56 @@
+Package: hoodscanR
+Title: Spatial cellular neighbourhood scanning in R
+Version: 0.99.0
+Authors@R: 
+    c(person(given = "Ning",
+             family = "Liu",
+             role = c("aut", "cre"),
+             email = "liu.n@wehi.edu.au",
+             comment = c(ORCID = "0000-0002-9487-9305")),
+      person(given = "Jarryd",
+             family = "Martin",
+             role = c("aut"),
+             email = "",
+             comment = c(ORCID = "")))
+Description: hoodscanR is an user-friendly R package providing functions to assist 
+    cellular neighborhood analysis of any spatial transcriptomics data with single-cell resolution. 
+    All functions in the package are built based on the SpatialExperiment object, 
+    allowing integration into various spatial transcriptomics-related packages from Bioconductor.
+    The package can result in cell-level neighborhood annotation output, along with funtions to
+    perform neighborhood colocalization analysis and neighborhood-based cell clustering.
+biocViews: Spatial, Transcriptomics, SingleCell, Clustering
+License: GPL-3 + file LICENSE
+URL: https://github.com/DavisLaboratory/hoodscanR
+BugReports: https://github.com/DavisLaboratory/hoodscanR/issues
+Encoding: UTF-8
+LazyData: false
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports:
+    knitr,
+    rmarkdown,
+    SpatialExperiment,
+    SummarizedExperiment,
+    circlize,
+    ComplexHeatmap,
+    scico,
+    rlang,
+    S4Vectors,
+    dplyr,
+    tibble,
+    utils,
+    ggplot2,
+    tidyr,
+    grid,
+    methods,
+    stats,
+    RANN,
+    Rcpp (>= 1.0.9)
+LinkingTo:
+    Rcpp
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: 
+    R (>= 4.3)
+VignetteBuilder: knitr

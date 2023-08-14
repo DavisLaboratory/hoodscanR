@@ -1,0 +1,186 @@
+---
+title: "A quick start guide to the standR package"
+author: "Ning Liu, Melissa Davis"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+    code_folding: show
+vignette: >
+  %\VignetteIndexEntry{hoodscanR_introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style type="text/css">
+  body{
+  font-size: 14pt;
+}
+</style>
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 72, fig.retina = 1)
+suppressWarnings(library(ggplot2))
+
+
+```
+
+# Installation
+
+```{r eval=FALSE}
+if (!require("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
+BiocManager::install("hoodscanR")
+```
+
+The development version of `standR` can be installed from GitHub:
+
+```{r eval=FALSE}
+devtools::install_github("DavisLaboratory/hoodscanR")
+```
+
+# Quick start
+
+```{r}
+library(hoodscanR)
+library(SpatialExperiment)
+library(scico)
+```
+
+# Data exploration
+
+```{r}
+data("spe_test")
+
+spe <- readHoodData(spe, anno_col = "celltypes")
+```
+
+```{r}
+spe
+```
+
+```{r}
+colData(spe)
+```
+
+We can have a look at the tissue and cell positions by using the function `plotTissue`.
+
+The test data is relatively sparse with low-level cell type annotations.
+
+```{r}
+col.pal <- c("red3", "royalblue", "gold", "cyan2", "purple3", "darkgreen")
+
+plotTissue(spe, color = cell_annotation, size = 1.5, alpha = 0.8) +
+  scale_color_manual(values = col.pal)
+```
+
+# Neighborhoods scanning
+
+In order to perform neighborhood scanning, we need to firstly identify k (in this example, k = 100) nearest cells for each cells.
+
+```{r}
+fnc <- findNearCells(spe, k = 100)
+```
+
+The output of `findNearCells` function includes two matrix, an annotation matrix and a distance matrix.
+
+```{r}
+lapply(fnc, function(x) x[1:10, 1:5])
+```
+
+We can then perform neighborhood analysis using the function `scanHoods`.
+
+```{r}
+pm <- scanHoods(fnc$distance)
+```
+
+The resulting matrix is the probability of each cell associating with their 100 nearest cells.
+
+```{r}
+pm[1:10, 1:5]
+```
+
+We can then merge the probabilities by the cell types of the 100 nearest cells.
+
+```{r}
+hoods <- mergeByGroup(pm, fnc$cells)
+```
+
+```{r}
+hoods[1:10, ]
+```
+
+# Neighborhoods analysis
+
+We plot randomly plot 10 cells to see the output of neighborhood scanning using `plotHoodMat`.
+
+```{r}
+plotHoodMat(hoods, n = 10, hm_height = 5)
+```
+
+Or to check the cells-of-interest with the parameter `targetCells` within the function
+
+```{r}
+plotHoodMat(hoods, targetCells = c("Lung9_Rep1_5_1975", "Lung9_Rep1_5_2712"), hm_height = 3)
+```
+
+We can then merge the neighborhood results with the SpatialExperiment object using `mergeHoodSpe` so that we can conduct more neighborhood-related analysis.
+
+```{r}
+spe <- mergeHoodSpe(spe, hoods)
+```
+
+To summarise our neighborhood results, we can use `calcMetrics` to calculate entropy and perplexity of the probability matrix so that we can have a summarisatino of the neighborhood distribution across the tissue slide, i.e. where neighborhood is more distinct and where is more mixed.
+
+```{r}
+spe <- calcMetrics(spe, pm_cols = colnames(hoods))
+```
+
+We then again use `plotTissue` to plot out the entropy or perplexity.
+
+```{r}
+plotTissue(spe, size = 1.5, color = entropy) +
+  scale_color_scico(palette = "tokyo")
+```
+
+```{r}
+plotTissue(spe, size = 1.5, color = perplexity) +
+  scale_color_scico(palette = "tokyo")
+```
+
+We can perform neighborhood colocalization analysis using `plotColocal`. Here we can see in the test data, endothelial cells and stromal cells are more likely to colocalize, epithelial cells and dividing cells are more likely to colocalize.
+
+```{r}
+plotColocal(spe, pm_cols = colnames(hoods))
+```
+
+We can cluster the cells by their neighborhood probability distribution using `clustByHood`, it is based on the k-means algorithm and here we set k to 10.
+
+```{r}
+spe <- clustByHood(spe, pm_cols = colnames(hoods), k = 10)
+```
+
+We can see what are the neighborhood distributions look like in each cluster using `plotProbDist`.
+
+```{r}
+plotProbDist(spe, pm_cols = colnames(hoods), by_cluster = TRUE, plot_all = TRUE, show_clusters = as.character(seq(10)))
+```
+
+We can plot the clusters on the tissue slide, agian using `plotTissue`.
+
+```{r}
+plotTissue(spe, color = clusters)
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```
+
+
