@@ -20,7 +20,7 @@ Description: hoodscanR is an user-friendly R package providing functions to assi
     perform neighborhood colocalization analysis and neighborhood-based cell clustering.
 biocViews: Spatial, Transcriptomics, SingleCell, Clustering
 License: GPL-3 + file LICENSE
-URL: https://github.com/DavisLaboratory/hoodscanR
+URL: https://github.com/DavisLaboratory/hoodscanR, https://davislaboratory.github.io/hoodscanR/
 BugReports: https://github.com/DavisLaboratory/hoodscanR/issues
 Encoding: UTF-8
 LazyData: false
