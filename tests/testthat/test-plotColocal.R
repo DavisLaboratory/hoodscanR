@@ -7,5 +7,7 @@ test_that("Testing plotColocal", {
   spe <- mergeHoodSpe(spe, pm2)
 
   expect_silent(plotColocal(spe, pm_cols = colnames(pm2)))
+  
+  expect_silent(plotColocal(spe, pm_cols = colnames(pm2), self_cor = FALSE, by_group = "cell_annotation"))
 
 })

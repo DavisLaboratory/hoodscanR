@@ -46,12 +46,12 @@ plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
   cdata <- as.data.frame(SummarizedExperiment::colData(spe))
 
   if ("cell_id" %in% colnames(cdata)) {
-    cdata <- dplyr::select(cdata, -cell_id)
+    cdata <- cdata[,!(colnames(cdata) %in% cell_id)]
   }
 
   toplot <- toplot |>
     cbind(cdata) |>
-    tibble::rownames_to_column("cell_id")
+    rownames2col("cell_id")
 
   aesmap <- rlang::enquos(...)
 
@@ -81,8 +81,7 @@ plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
     tissue_theme()
 
   if (!is(targetcell, "logical")) {
-    target_df <- toplot |>
-      dplyr::filter(cell_id %in% targetcell)
+    target_df <- toplot[toplot$cell_id %in% targetcell,]
 
     p <- p +
       ggplot2::geom_point(data = target_df, aes(x, y), size = targetsize,

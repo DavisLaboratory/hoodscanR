@@ -1,17 +1,7 @@
 #' @importFrom SummarizedExperiment colData
 #' @import SpatialExperiment
-#' @importFrom dplyr across
 #' @import ggplot2
 #' @importFrom SummarizedExperiment assay
-#' @importFrom tibble column_to_rownames
-#' @importFrom tibble rownames_to_column
-#' @importFrom dplyr group_by
-#' @importFrom S4Vectors metadata
-#' @importFrom S4Vectors metadata<-
-#' @importFrom tidyr pivot_longer
-#' @importFrom dplyr filter
-#' @importFrom dplyr summarise
-#' @importFrom dplyr where
 #' @importFrom methods is
 #' @importFrom grid gpar
 #' @importFrom grid unit
@@ -21,6 +11,8 @@
 #' @import knitr
 #' @importFrom utils globalVariables
 #' @importFrom rmarkdown draft
+#' @importFrom stats aggregate 
+#' @importFrom stats reshape
 NULL
 
 #' Method to identify cellular spatial neighbourhood from single cell spatial

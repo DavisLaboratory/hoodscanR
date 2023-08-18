@@ -2,7 +2,7 @@
 #'
 #' @param object A probability matrix or a SpatialExperiment.
 #' @param k The number of clusters. By default is 2^ncol(object)-1.
-#' @param iter.max the maximum number of iterations allowed.
+#' @param iter_max the maximum number of iterations allowed.
 #' @param nstart how many random sets should be chosen.
 #' @param pm_cols The colnames of probability matrix. This is requires for
 #' SpatialExperiment input. Assuming that the probability is stored in the colData.
@@ -35,8 +35,8 @@ setMethod(
   "clustByHood",
   signature("matrix"),
   function(object, k = 2^ncol(object) - 1,
-           iter.max = 1000, nstart = 5) {
-    clust <- pmclust_intl(object, k, iter.max, nstart, algo = "Hartigan-Wong")
+           iter_max = 1000, nstart = 5) {
+    clust <- pmclust_intl(object, k, iter_max, nstart, algo = "Hartigan-Wong")
 
     return(clust)
   }
@@ -47,7 +47,7 @@ setMethod(
   "clustByHood",
   signature("SpatialExperiment"),
   function(object, pm_cols, k = 0,
-           iter.max = 1000, nstart = 5,
+           iter_max = 1000, nstart = 5,
            algo = "Hartigan-Wong") {
     dat <- as.data.frame(colData(object))
 
@@ -61,10 +61,10 @@ setMethod(
       k <- 2^ncol(dat) - 1
     }
 
-    clust <- pmclust_intl(dat, k, iter.max, nstart, algo)
+    clust <- pmclust_intl(dat, k, iter_max, nstart, algo)
 
     colData(object)$clusters <- as.character(clust$cluster)
-    metadata(object)$centroids <- clust$centers
+    object@metadata$centroids <- clust$centers
 
     return(object)
   }

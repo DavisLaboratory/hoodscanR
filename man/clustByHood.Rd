@@ -9,13 +9,13 @@
 \usage{
 clustByHood(object, ...)
 
-\S4method{clustByHood}{matrix}(object, k = 2^ncol(object) - 1, iter.max = 1000, nstart = 5)
+\S4method{clustByHood}{matrix}(object, k = 2^ncol(object) - 1, iter_max = 1000, nstart = 5)
 
 \S4method{clustByHood}{SpatialExperiment}(
   object,
   pm_cols,
   k = 0,
-  iter.max = 1000,
+  iter_max = 1000,
   nstart = 5,
   algo = "Hartigan-Wong"
 )
@@ -27,7 +27,7 @@ clustByHood(object, ...)
 
 \item{k}{The number of clusters. By default is 2^ncol(object)-1.}
 
-\item{iter.max}{the maximum number of iterations allowed.}
+\item{iter_max}{the maximum number of iterations allowed.}
 
 \item{nstart}{how many random sets should be chosen.}
 

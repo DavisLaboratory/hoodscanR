@@ -17,12 +17,12 @@ plotColocal(object, ...)
 \S4method{plotColocal}{SpatialExperiment}(
   object,
   pm_cols,
-  self.cor = TRUE,
-  byGroup = NA,
+  self_cor = TRUE,
+  by_group = NULL,
   hm_width = 5,
   hm_height = 5,
-  clusterRows = TRUE,
-  clusterCols = TRUE,
+  cluster_row = TRUE,
+  cluster_col = TRUE,
   return_matrix = FALSE
 )
 }
@@ -38,16 +38,16 @@ plotColocal(object, ...)
 \item{pm_cols}{The colnames of probability matrix. This is requires for
 SpatialExperiment input. Assuming that the probability is stored in the colData.}
 
-\item{self.cor}{Logical. By default is TRUE, inidicating running a correlation
+\item{self_cor}{Logical. By default is TRUE, inidicating running a correlation
 between neighbourhoods to perform a simple co-localization analysis.
 When this set to FALSE, it will plot the average probability of each
-neighbourhood by group using the byGroup parameter.}
+neighbourhood by group using the by_group parameter.}
 
-\item{byGroup}{Character. This is required when self.cor is set to FALSE.}
+\item{by_group}{Character. This is required when self_cor is set to FALSE.}
 
-\item{clusterRows}{Logical. Cluster rows.}
+\item{cluster_row}{Logical. Cluster rows.}
 
-\item{clusterCols}{Logical. Cluster columns.}
+\item{cluster_col}{Logical. Cluster columns.}
 
 \item{return_matrix}{Logical. Export a numeric matrix .}
 }
@@ -73,5 +73,7 @@ pm2 <- mergeByGroup(pm, fnc$cells)
 spe <- mergeHoodSpe(spe, pm2)
 
 plotColocal(spe, pm_cols = colnames(pm2))
+
+plotColocal(spe, pm_cols = colnames(pm2), self_cor = FALSE, by_group = "cell_annotation")
 
 }

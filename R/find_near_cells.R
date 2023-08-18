@@ -74,7 +74,7 @@ findNearCells <- function(dat, k = 100, targetCell = FALSE,
   } else {
     result <- cbind(idxcell, idxclosecell) |>
       as.data.frame() |>
-      tibble::column_to_rownames("idxcell")
+      col2rownames("idxcell")
   }
 
   colnames(result) <- paste0("nearest_cell_", seq(k))

@@ -3,15 +3,15 @@
 #' @param object A probability matrix or SpatialExperiment.
 #' @param pm_cols The colnames of probability matrix. This is requires for
 #' SpatialExperiment input. Assuming that the probability is stored in the colData.
-#' @param self.cor Logical. By default is TRUE, inidicating running a correlation
+#' @param self_cor Logical. By default is TRUE, inidicating running a correlation
 #' between neighbourhoods to perform a simple co-localization analysis.
 #' When this set to FALSE, it will plot the average probability of each
-#' neighbourhood by group using the byGroup parameter.
-#' @param byGroup Character. This is required when self.cor is set to FALSE.
+#' neighbourhood by group using the by_group parameter.
+#' @param by_group Character. This is required when self_cor is set to FALSE.
 #' @param hm_width Integer. The width of heatmap.
 #' @param hm_height Integer. The height of heatmap.
-#' @param clusterRows Logical. Cluster rows.
-#' @param clusterCols Logical. Cluster columns.
+#' @param cluster_row Logical. Cluster rows.
+#' @param cluster_col Logical. Cluster columns.
 #' @param return_matrix Logical. Export a numeric matrix .
 #' @param ... Ignore parameter.
 #'
@@ -42,6 +42,8 @@
 #'
 #' plotColocal(spe, pm_cols = colnames(pm2))
 #'
+#' plotColocal(spe, pm_cols = colnames(pm2), self_cor = FALSE, by_group = "cell_annotation")
+#'
 setGeneric(
   "plotColocal",
   function(object, ...) standardGeneric("plotColocal")
@@ -64,8 +66,8 @@ setMethod(
 setMethod(
   "plotColocal",
   signature("SpatialExperiment"),
-  function(object, pm_cols, self.cor = TRUE, byGroup = NA, hm_width = 5,
-           hm_height = 5, clusterRows = TRUE, clusterCols = TRUE,
+  function(object, pm_cols, self_cor = TRUE, by_group = NULL, hm_width = 5,
+           hm_height = 5, cluster_row = TRUE, cluster_col = TRUE,
            return_matrix = FALSE) {
     dat <- as.data.frame(colData(object))
 
@@ -73,24 +75,25 @@ setMethod(
       stop("The pm_cols are not included in the SpatialExperiment.")
     }
 
-    if (self.cor) {
+    if (self_cor) {
       cor.m <- cor(dat[, pm_cols])
       ht <- plotColocal_intl(cor.m,
         hm_width = hm_width, hm_height = hm_height,
-        clusterRows = clusterRows, clusterCols = clusterCols
+        cluster_row = cluster_row, cluster_col = cluster_col
       )
     } else {
-      if (is(byGroup, "logical") | length(byGroup) != 1 | !(byGroup %in% colnames(dat))) {
-        stop("byGroup should be the columns in colData")
+      if (is.null(by_group) | length(by_group) != 1 | !(by_group %in% colnames(dat))) {
+        stop("by_group should be the columns in colData")
       } else {
-        datx <- dat[, c(pm_cols, byGroup)]
-        cor.m <- mean_by_group(datx, byGroup) |>
+        datx <- dat[, c(pm_cols, by_group)]
+        
+        cor.m <- mean_by_group(datx, by_group) |>
           as.data.frame() |>
-          column_to_rownames(byGroup) |>
+          col2rownames(by_group) |>
           as.matrix()
         ht <- plotColocal_intl(cor.m,
           title = "Mean probability within groups", legend.name = "Prob.",
-          hm_width = hm_width, hm_height = hm_height, self.cor = FALSE
+          hm_width = hm_width, hm_height = hm_height, self_cor = FALSE
         )
       }
     }
@@ -104,21 +107,24 @@ setMethod(
 )
 
 mean_by_group <- function(df, group_col) {
-  df[, group_col] <- as.character(df[, group_col])
-
-  df_out <- df |>
-    group_by(!!rlang::sym(group_col)) |>
-    summarise(across(where(is.numeric), mean))
-
-  return(df_out)
+  df[[group_col]] <- as.character(df[[group_col]])
+  
+  numeric_cols <- sapply(df, is.numeric)
+  
+  grouped <- aggregate(df[, numeric_cols], by = list(df[[group_col]]), FUN = mean, na.rm = TRUE)
+  
+  colnames(grouped)[1] <- group_col
+  
+  return(grouped)
 }
+
 
 plotColocal_intl <- function(m, col.pal = NA,
                              title = "Pearson correlation between neighbourhoods",
                              title.size = 15, legend.name = "Cor.",
-                             hm_width, hm_height, self.cor = TRUE,
-                             clusterRows = FALSE, clusterCols = FALSE) {
-  if (isTRUE(self.cor)) {
+                             hm_width, hm_height, self_cor = TRUE,
+                             cluster_row = FALSE, cluster_col = FALSE) {
+  if (isTRUE(self_cor)) {
     if (is(col.pal, "logical")) {
       cp <- circlize::colorRamp2(seq(-1, 1, by = 0.01),
                                  scico::scico(201, palette = "roma", direction = -1))
@@ -143,7 +149,7 @@ plotColocal_intl <- function(m, col.pal = NA,
     column_dend_height = unit(1, "cm"),
     row_dend_width = unit(1, "cm"), column_names_rot = 45,
     width = unit(hm_width, "cm"), height = unit(hm_height, "cm"),
-    cluster_rows = clusterRows, cluster_columns = clusterCols
+    cluster_rows = cluster_row, cluster_columns = cluster_col
   )
 
   return(ht)

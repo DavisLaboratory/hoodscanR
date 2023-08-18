@@ -55,8 +55,8 @@ readHoodData <- function(spe = NA, anno_col = NA,
     rownames(dummy_exp_m) <- paste0("gene_", seq(10))
     spe_n <- SpatialExperiment::SpatialExperiment(
       assay = list("counts" = as.data.frame(dummy_exp_m)),
-      colData = cell_anno_dat |> tibble::column_to_rownames("cell_id"),
-      spatialCoords = cell_pos_dat |> tibble::column_to_rownames("cell_id") |>
+      colData = cell_anno_dat |> col2rownames("cell_id"),
+      spatialCoords = cell_pos_dat |> col2rownames("cell_id") |>
         as.matrix(),
       metadata = list("dummy" = 1)
     )

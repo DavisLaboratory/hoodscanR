@@ -50,11 +50,8 @@ setMethod(
     if (is(targetCells, "logical")) {
       targetCells <- rownames(object)[seq(6)]
     }
-
-    dat <- as.data.frame(object) |>
-      rownames_to_column("cells") |>
-      filter(cells %in% targetCells) |>
-      pivot_longer(cols = -cells, names_to = "hoods", values_to = "probability")
+    
+    dat <- format_dat(object, targetCells = targetCells)
 
     p <- plotProbDist_intl(dat, ...) +
       facet_wrap(~cells, ncol = 4)
@@ -88,18 +85,18 @@ setMethod(
       dat <- dat[, c(pm_cols, "clusters")]
 
       dat <- as.data.frame(dat) |>
-        rownames_to_column("cells") |>
-        filter(clusters %in% show_clusters)
+        rownames2col("cells")
+      
+      dat <- dat[dat$clusters %in% show_clusters,]
 
       if (isTRUE(plot_all)) {
         p <- plotProbDist_box_intl(dat, pm_cols) +
           facet_wrap(~clusters)
       } else {
+        
         datx <- sample_rows(dat, "clusters", sample_size)
-
-        datx <- datx |>
-          pivot_longer(cols = -c(cells, clusters), names_to = "hoods",
-                       values_to = "probability")
+        
+        datx <- format_dat_pivot(datx, cols2ex = c("cells","clusters"))
 
         p <- plotProbDist_intl(datx, ...) +
           facet_wrap(~ clusters + cells, ncol = 4)
@@ -111,11 +108,7 @@ setMethod(
         targetCells <- rownames(dat)[seq(6)]
       }
 
-      dat <- as.data.frame(dat) |>
-        rownames_to_column("cells") |>
-        filter(cells %in% targetCells) |>
-        pivot_longer(cols = -cells, names_to = "hoods",
-                     values_to = "probability")
+      dat <- format_dat(dat, targetCells = targetCells)
 
       p <- plotProbDist_intl(dat, ...) +
         facet_wrap(~cells, ncol = 4)
@@ -128,9 +121,50 @@ setMethod(
 
 
 sample_rows <- function(df, group_var, sample_size) {
-  df |>
-    group_by(!!sym(group_var)) |>
-    dplyr::slice_sample(n = sample_size, replace = FALSE)
+  grouped <- split(df, df[[group_var]])
+  
+  sampled <- lapply(grouped, function(group_df) {
+    if (nrow(group_df) >= sample_size) {
+      group_df[sample(seq_len(nrow(group_df)), size = sample_size), ]
+    } else {
+      group_df
+    }
+  })
+  
+  sampled_df <- do.call(rbind, sampled)
+  rownames(sampled_df) <- NULL
+  return(sampled_df)
+}
+
+
+format_dat <- function(object, targetCells = NULL, cols2ex = "cells"){
+  
+  dat <- as.data.frame(object) |>
+    rownames2col("cells")
+  if (is.null(targetCells)){
+    filtered_dat <- dat
+  } else {
+    dat <- as.data.frame(object) |>
+      rownames2col("cells")
+    filtered_dat <- dat[dat$cells %in% targetCells, ]
+  }
+  
+  reshaped_dat <- format_dat_pivot(filtered_dat, cols2ex)
+  return(reshaped_dat)
+}
+
+format_dat_pivot <- function(x, cols2ex = "cells"){
+  
+  reshaped_dat <- reshape(x, varying = names(x)[!(names(x) %in% cols2ex)],
+                          v.names = "probability", timevar = "hoods",
+                          times = names(x)[!(names(x) %in% cols2ex)],
+                          direction = "long")
+  reshaped_dat <- reshaped_dat[,names(reshaped_dat) != "id"]
+  reshaped_dat$cells <- factor(reshaped_dat$cells, levels = x$cells)
+  dat <- reshaped_dat[order(reshaped_dat$cells, reshaped_dat$hoods),]
+  rownames(dat) <- NULL
+  
+  return(dat)
 }
 
 
@@ -168,11 +202,8 @@ plotProbDist_box_intl <- function(x, pm_cols, ...) {
   } else {
     defaultmap <- list()
   }
-
-  x <- pivot_longer(x,
-    cols = pm_cols,
-    names_to = "hoods", values_to = "probability"
-  )
+  
+  x <- format_dat_pivot(x, cols2ex = c("cells","clusters"))
 
   p <- ggplot2::ggplot(x, aes(x = hoods, y = probability, !!!aesmap))
 
