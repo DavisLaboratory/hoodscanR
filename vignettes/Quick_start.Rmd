@@ -1,5 +1,5 @@
 ---
-title: "A quick start guide to the standR package"
+title: "A quick start guide to the hoodscanR package"
 author: "Ning Liu, Melissa Davis"
 date: "`r Sys.Date()`"
 output: 
@@ -38,7 +38,7 @@ if (!require("BiocManager", quietly = TRUE)) {
 BiocManager::install("hoodscanR")
 ```
 
-The development version of `standR` can be installed from GitHub:
+The development version of `hoodscanR` can be installed from GitHub:
 
 ```{r eval=FALSE}
 devtools::install_github("DavisLaboratory/hoodscanR")
