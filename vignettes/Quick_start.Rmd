@@ -22,11 +22,20 @@ vignette: >
 </style>
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 72, fig.retina = 1)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 80)
 suppressWarnings(library(ggplot2))
 
 
 ```
+
+# Introduction
+
+hoodscanR is an user-friendly R package providing functions to assist cellular neighborhood analysis of any spatial transcriptomics data with single-cell resolution. 
+
+All functions in the package are built based on the SpatialExperiment infrastructure, 
+allowing integration into various spatial transcriptomics-related packages from Bioconductor.
+The package can result in cell-level neighborhood annotation output, along with funtions to
+perform neighborhood colocalization analysis and neighborhood-based cell clustering.
 
 # Installation
 
@@ -72,7 +81,7 @@ We can have a look at the tissue and cell positions by using the function `plotT
 
 The test data is relatively sparse with low-level cell type annotations.
 
-```{r}
+```{r, fig.width=7, fig.height=4}
 col.pal <- c("red3", "royalblue", "gold", "cyan2", "purple3", "darkgreen")
 
 plotTissue(spe, color = cell_annotation, size = 1.5, alpha = 0.8) +
@@ -119,13 +128,13 @@ hoods[1:10, ]
 
 We plot randomly plot 10 cells to see the output of neighborhood scanning using `plotHoodMat`.
 
-```{r}
+```{r, fig.width=5, fig.height=4}
 plotHoodMat(hoods, n = 10, hm_height = 5)
 ```
 
 Or to check the cells-of-interest with the parameter `targetCells` within the function
 
-```{r}
+```{r, fig.width=5, fig.height=4}
 plotHoodMat(hoods, targetCells = c("Lung9_Rep1_5_1975", "Lung9_Rep1_5_2712"), hm_height = 3)
 ```
 
@@ -143,19 +152,19 @@ spe <- calcMetrics(spe, pm_cols = colnames(hoods))
 
 We then again use `plotTissue` to plot out the entropy or perplexity.
 
-```{r}
+```{r, fig.width=7, fig.height=4}
 plotTissue(spe, size = 1.5, color = entropy) +
   scale_color_scico(palette = "tokyo")
 ```
 
-```{r}
+```{r, fig.width=7, fig.height=4}
 plotTissue(spe, size = 1.5, color = perplexity) +
   scale_color_scico(palette = "tokyo")
 ```
 
 We can perform neighborhood colocalization analysis using `plotColocal`. Here we can see in the test data, endothelial cells and stromal cells are more likely to colocalize, epithelial cells and dividing cells are more likely to colocalize.
 
-```{r}
+```{r, fig.width=6, fig.height=4}
 plotColocal(spe, pm_cols = colnames(hoods))
 ```
 
@@ -167,13 +176,13 @@ spe <- clustByHood(spe, pm_cols = colnames(hoods), k = 10)
 
 We can see what are the neighborhood distributions look like in each cluster using `plotProbDist`.
 
-```{r}
+```{r, fig.width=6, fig.height=5}
 plotProbDist(spe, pm_cols = colnames(hoods), by_cluster = TRUE, plot_all = TRUE, show_clusters = as.character(seq(10)))
 ```
 
 We can plot the clusters on the tissue slide, agian using `plotTissue`.
 
-```{r}
+```{r, fig.width=7, fig.height=4}
 plotTissue(spe, color = clusters)
 ```
 
