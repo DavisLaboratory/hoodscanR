@@ -45,3 +45,10 @@ doc
 # Rproj
 hoodscanR.Rproj
 docs
+
+#src
+src/cal_metrics.o
+src/hoodscanR.so
+src/RcppExports.o
+
+
