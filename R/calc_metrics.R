@@ -7,6 +7,14 @@
 #'
 #' @return A SpatialExperiment object. Calculated entropy and perplexity are
 #' saved as columns in the colData of the SpatialExperiment object.
+#' Entropy and perplexity are calculated based on information theory:
+#' 
+#' P(x) is the probability calculated from the scanHoods function.
+#' 
+#' Entropy H(x) = -P(x)log2(P(x))
+#' 
+#' Perplexity P(x) = 2^H(x)
+#' 
 #' @export
 #'
 #' @examples
@@ -26,6 +34,9 @@
 #' spe <- calcMetrics(spe, pm_cols = colnames(pm2))
 #'
 calcMetrics <- function(spe, pm = NA, pm_cols = NA) {
+  if (!is(spe, "SpatialExperiment")){
+    stop("The input spe must be a SpatialExperiment object.")
+  }
   if (is(pm, "logical")) {
     if (is(pm_cols, "logical")) {
       stop("Need to input either the pm or pm_cols parameters.")

@@ -12,6 +12,15 @@ spatial transcriptomics data at single cell level, such as CosMx and MERFISH etc
 \code{hoodscanR} takes the cellular position and cell type annotations
 as inputs, allowing cellular spatial neighbourhood analysis.
 }
+\details{
+Key neighborhood analysis functions include  \code{\link{findNearCells}, 
+\link{scanHoods}, \link{mergeByGroup}, \link{calcMetrics}, 
+\link{clustByHood}}.
+
+Key visualisation functions include
+\code{\link{plotTissue}, \link{plotHoodMat}, \link{plotColocal},
+\link{plotProbDist}}.
+}
 \author{
 Ning Liu \email{liu.n@wehi.edu.au}
 }

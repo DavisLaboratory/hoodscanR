@@ -13,4 +13,12 @@ test_that("Testing calcMetrics", {
 
   expect_true("entropy" %in% colnames(colData(spe)))
   expect_true("perplexity" %in% colnames(colData(spe)))
+  
+  
+  expect_error(calcMetrics(spe, pm_cols = c("xx","yy","zz")))
+  
+  spe1 <- calcMetrics(spe, pm = pm)
+  
+  expect_true("entropy" %in% colnames(colData(spe1)))
+  expect_true("perplexity" %in% colnames(colData(spe1)))
 })

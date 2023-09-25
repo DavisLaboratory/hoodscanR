@@ -26,6 +26,7 @@
 findNearCells <- function(dat, k = 100, targetCell = FALSE,
                           reportCellID = FALSE,
                           reportDist = TRUE, anno_col = 0) {
+  
   if (!is(dat, "SpatialExperiment")) {
     stop("Please use SpatialExperiment as input.")
   }

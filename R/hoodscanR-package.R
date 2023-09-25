@@ -23,6 +23,13 @@ NULL
 #' `hoodscanR` takes the cellular position and cell type annotations
 #' as inputs, allowing cellular spatial neighbourhood analysis.
 #'
+#' Key neighborhood analysis functions include  \code{\link{findNearCells}, 
+#' \link{scanHoods}, \link{mergeByGroup}, \link{calcMetrics}, 
+#' \link{clustByHood}}. 
+#' 
+#' Key visualisation functions include 
+#' \code{\link{plotTissue}, \link{plotHoodMat}, \link{plotColocal},
+#' \link{plotProbDist}}.
 #'
 #'
 #' @author Ning Liu \email{liu.n@@wehi.edu.au}
@@ -30,16 +37,20 @@ NULL
 #' @docType package
 #' @aliases hoodscanR hoodscanR-package
 #' @keywords internal
+#' 
 #'
 #' @useDynLib hoodscanR
 #'
 NULL
 
 
-#' Example test data
+#' Example test spatial transcriptomics data
 #'
 #' hoodscanR-package has 1 datasets: \itemize{
-#'   \item spe_test  An example data
+#'   \item spe_test  Example test spatial transcriptomics data in
+#'  SpatialExperiment format. This test data is randomly subsetting 
+#'  from the publicly available CosMx non-small cell lung cancer data.
+#'  Source data: https://nanostring.com/products/cosmx-spatial-molecular-imager/nsclc-ffpe-dataset/.
 #'  }
 #'
 #' @docType data

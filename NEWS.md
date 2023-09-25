@@ -1,2 +1,2 @@
-# hoodscanR 1.0.0
+# hoodscanR 0.99.1
 First release.

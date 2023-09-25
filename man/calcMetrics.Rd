@@ -17,6 +17,13 @@ SpatialExperiment input. Assuming that the probability is stored in the colData.
 \value{
 A SpatialExperiment object. Calculated entropy and perplexity are
 saved as columns in the colData of the SpatialExperiment object.
+Entropy and perplexity are calculated based on information theory:
+
+P(x) is the probability calculated from the scanHoods function.
+
+Entropy H(x) = -P(x)log2(P(x))
+
+Perplexity P(x) = 2^H(x)
 }
 \description{
 Calculate metrics for probability matrix

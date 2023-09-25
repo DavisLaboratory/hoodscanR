@@ -4,7 +4,7 @@
 \name{spe_test}
 \alias{spe_test}
 \alias{spe}
-\title{Example test data}
+\title{Example test spatial transcriptomics data}
 \format{
 A SpatialExperiment object
 }
@@ -16,7 +16,10 @@ A SpatialExperiment object
 }
 \description{
 hoodscanR-package has 1 datasets: \itemize{
-\item spe_test  An example data
+\item spe_test  Example test spatial transcriptomics data in
+SpatialExperiment format. This test data is randomly subsetting
+from the publicly available CosMx non-small cell lung cancer data.
+Source data: https://nanostring.com/products/cosmx-spatial-molecular-imager/nsclc-ffpe-dataset/.
 }
 }
 \examples{

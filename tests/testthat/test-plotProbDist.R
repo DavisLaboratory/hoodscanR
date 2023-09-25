@@ -7,8 +7,18 @@ test_that("Testing plotProbDist", {
   spe <- mergeHoodSpe(spe, pm2)
 
   expect_silent(plotProbDist(spe, pm_cols = colnames(pm2)))
+  
+  expect_error(plotProbDist(spe, pm_cols = c("xx","yy","zz")))
 
   spe <- clustByHood(spe, pm_cols = colnames(pm2), k = 5)
 
-  expect_silent(plotProbDist(spe, pm_cols = colnames(pm2), by_cluster = TRUE, plot_all = TRUE))
+  expect_silent(plotProbDist(spe, pm_cols = colnames(pm2), 
+                             by_cluster = TRUE, plot_all = TRUE))
+  
+  expect_silent(plotProbDist(spe, pm_cols = colnames(pm2), 
+                             by_cluster = TRUE, plot_all = FALSE))
+  
+  expect_error(plotProbDist(spe, targetCells = "cell_xyz"))
+  
+  
 })

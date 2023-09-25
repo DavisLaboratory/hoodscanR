@@ -3,7 +3,7 @@ title: "A quick start guide to the hoodscanR package"
 author: "Ning Liu, Melissa Davis"
 date: "`r Sys.Date()`"
 output: 
-  html_document:
+  BiocStyle::html_document:
     toc: true
     number_sections: true
     theme: cosmo
@@ -15,12 +15,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{=html}
 <style type="text/css">
   body{
   font-size: 14pt;
 }
 </style>
-
+```
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 80)
 suppressWarnings(library(ggplot2))
@@ -30,12 +31,9 @@ suppressWarnings(library(ggplot2))
 
 # Introduction
 
-hoodscanR is an user-friendly R package providing functions to assist cellular neighborhood analysis of any spatial transcriptomics data with single-cell resolution. 
+hoodscanR is an user-friendly R package providing functions to assist cellular neighborhood analysis of any spatial transcriptomics data with single-cell resolution.
 
-All functions in the package are built based on the SpatialExperiment infrastructure, 
-allowing integration into various spatial transcriptomics-related packages from Bioconductor.
-The package can result in cell-level neighborhood annotation output, along with funtions to
-perform neighborhood colocalization analysis and neighborhood-based cell clustering.
+All functions in the package are built based on the `r BiocStyle::Biocpkg("SpatialExperiment")` infrastructure, allowing integration into various spatial transcriptomics-related packages from Bioconductor. The package can result in cell-level neighborhood annotation output, along with funtions to perform neighborhood colocalization analysis and neighborhood-based cell clustering.
 
 # Installation
 
@@ -62,6 +60,8 @@ library(scico)
 ```
 
 # Data exploration
+
+The `readHoodData` function can format the spatialExperiment input object as desired for all other functions in the `hoodscanR` package.
 
 ```{r}
 data("spe_test")
@@ -90,26 +90,31 @@ plotTissue(spe, color = cell_annotation, size = 1.5, alpha = 0.8) +
 
 # Neighborhoods scanning
 
-In order to perform neighborhood scanning, we need to firstly identify k (in this example, k = 100) nearest cells for each cells.
+In order to perform neighborhood scanning, we need to firstly identify 
+k (in this example, k = 100) nearest cells for each cells. 
+The searching algorithm is based on Approximate Near Neighbor (ANN) 
+C++ library from the RANN package.
 
 ```{r}
 fnc <- findNearCells(spe, k = 100)
 ```
 
-The output of `findNearCells` function includes two matrix, an annotation matrix and a distance matrix.
+The output of `findNearCells` function includes two matrix, an annotation 
+matrix and a distance matrix.
 
 ```{r}
 lapply(fnc, function(x) x[1:10, 1:5])
 ```
 
 We can then perform neighborhood analysis using the function `scanHoods`.
+This function incldue the modified softmax algorithm, aimming to genereate a
+matrix with the probability of each cell associating with their 100 nearest cells.
 
 ```{r}
 pm <- scanHoods(fnc$distance)
 ```
 
-The resulting matrix is the probability of each cell associating with their 100 nearest cells.
-
+The resulting 
 ```{r}
 pm[1:10, 1:5]
 ```
@@ -120,13 +125,17 @@ We can then merge the probabilities by the cell types of the 100 nearest cells.
 hoods <- mergeByGroup(pm, fnc$cells)
 ```
 
+Now we have the final probability distribution of each cell all each neighborhood.
+
 ```{r}
 hoods[1:10, ]
 ```
 
 # Neighborhoods analysis
 
-We plot randomly plot 10 cells to see the output of neighborhood scanning using `plotHoodMat`.
+We plot randomly plot 10 cells to see the output of neighborhood scanning using `plotHoodMat`. In this plot, each value represent the probability of the each 
+cell (each row) located in each cell type neighborhood. The rowSums of the probability
+maxtrix will always be 1.
 
 ```{r, fig.width=5, fig.height=4}
 plotHoodMat(hoods, n = 10, hm_height = 5)
@@ -144,13 +153,20 @@ We can then merge the neighborhood results with the SpatialExperiment object usi
 spe <- mergeHoodSpe(spe, hoods)
 ```
 
-To summarise our neighborhood results, we can use `calcMetrics` to calculate entropy and perplexity of the probability matrix so that we can have a summarisatino of the neighborhood distribution across the tissue slide, i.e. where neighborhood is more distinct and where is more mixed.
+To summarise our neighborhood results, we can use `calcMetrics` to calculate entropy and perplexity of the probability matrix so that we can have a summarisation of the neighborhood distribution across the tissue slide, i.e. where neighborhood is more distinct and where is more mixed.
 
 ```{r}
 spe <- calcMetrics(spe, pm_cols = colnames(hoods))
 ```
 
 We then again use `plotTissue` to plot out the entropy or perplexity.
+
+While both entropy and perplexity measure the mixture of neighborhood 
+of each cell, perplexity can be more intuitive for the human mind as the value
+of it actually mean something. For example, perplexity of 1 means the cell is 
+located in a very distinct neighborhood, perplexity of 2 means the cell is 
+located in a mixed neighborhood, and the probability is about 50% to 50%. 
+
 
 ```{r, fig.width=7, fig.height=4}
 plotTissue(spe, size = 1.5, color = entropy) +
@@ -162,7 +178,9 @@ plotTissue(spe, size = 1.5, color = perplexity) +
   scale_color_scico(palette = "tokyo")
 ```
 
-We can perform neighborhood colocalization analysis using `plotColocal`. Here we can see in the test data, endothelial cells and stromal cells are more likely to colocalize, epithelial cells and dividing cells are more likely to colocalize.
+We can perform neighborhood colocalization analysis using `plotColocal`. 
+This function compute pearson correlation on the probability distribution of each cell.
+Here we can see in the test data, endothelial cells and stromal cells are more likely to colocalize, epithelial cells and dividing cells are more likely to colocalize.
 
 ```{r, fig.width=6, fig.height=4}
 plotColocal(spe, pm_cols = colnames(hoods))
@@ -191,5 +209,3 @@ plotTissue(spe, color = clusters)
 ```{r}
 sessionInfo()
 ```
-
-

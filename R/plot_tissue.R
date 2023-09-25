@@ -24,6 +24,15 @@
 plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
                        targetshape = 1, targetcolor = "red",
                        scaleFactor = 1, reverseY = TRUE, ...) {
+  
+  if (!is(spe, "SpatialExperiment")){
+    stop("The input spe must be a SpatialExperiment object.")
+  }
+  
+  if (is.null(SpatialExperiment::spatialCoordsNames(spe))){
+    stop("Coordinates are not found in the spatialCoords of spe.")
+  }
+  
   if (!is(targetcell, "logical")) {
     if (length(targetcell) == 1) {
       ncells <- findNearCells(spe,

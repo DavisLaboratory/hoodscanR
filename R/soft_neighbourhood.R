@@ -18,6 +18,10 @@
 #'
 scanHoods <- function(m, mode = c("proximityFocused", "smoothFadeout"),
                       tau = NA, t_init = NA) {
+  if (!is(m, "matrix")){
+    stop("The input m must be a matrix.")
+  }
+  
   if (length(mode) == 2) {
     mode <- "proximityFocused"
   }

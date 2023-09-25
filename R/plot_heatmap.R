@@ -109,7 +109,7 @@ setMethod(
 mean_by_group <- function(df, group_col) {
   df[[group_col]] <- as.character(df[[group_col]])
   
-  numeric_cols <- sapply(df, is.numeric)
+  numeric_cols <- vapply(df, is.numeric, logical(1))
   
   grouped <- aggregate(df[, numeric_cols], by = list(df[[group_col]]), FUN = mean, na.rm = TRUE)
   

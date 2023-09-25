@@ -7,4 +7,5 @@ test_that("testing plotHoodMat", {
   spe <- mergeHoodSpe(spe, pm2)
 
   expect_silent(plotHoodMat(spe, pm_cols = colnames(pm2)))
+  expect_error(plotHoodMat(spe, pm_cols = "xyz"))
 })

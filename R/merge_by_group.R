@@ -20,6 +20,9 @@
 #' pm2 <- mergeByGroup(pm, fnc$cells)
 #'
 mergeByGroup <- function(pm, group_df) {
+  if (!is(pm, "matrix")){
+    stop("The input pm must be a numeric matrix.")
+  }
   df <- as.matrix(pm)
   group_df <- as.matrix(group_df)
 
