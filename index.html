@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="index.html">hoodscanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,6 +80,11 @@
 <div class="page-header"><h1 id="hoodscanr-cellular-neighborhoods-scanning-from-spatial-transcriptomics-data-in-r-">hoodscanR: Cellular neighborhoods scanning from spatial transcriptomics data in R <img src="reference/figures/hoodscanR_sticker.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#hoodscanr-cellular-neighborhoods-scanning-from-spatial-transcriptomics-data-in-r-"></a>
 </h1></div>
 <p><a href="https://github.com/DavisLaboratory/hoodscanR/actions" class="external-link"><img src="https://github.com/DavisLaboratory/hoodscanR/workflows/R-CMD-check-bioc/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/DavisLaboratory/hoodscanR?branch=devel" class="external-link"><img src="https://codecov.io/gh/DavisLaboratory/hoodscanR/branch/devel/graph/badge.svg" alt="Coverage status"></a></p>
+<p>Install released version from Bioconductor</p>
+<pre><code><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"hoodscanR"</span><span class="op">)</span></span></code></pre>
 <p>Install development version from GitHub</p>
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DavisLaboratory/hoodscanR"</span><span class="op">)</span></span></code></pre>
