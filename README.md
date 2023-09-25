@@ -5,6 +5,15 @@
 
 
 
+Install released version from Bioconductor
+
+```
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("hoodscanR")
+```
+
 
 Install development version from GitHub
 
