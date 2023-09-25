@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hoodscanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@
                         <h4 data-toc-skip class="author">Ning Liu,
 Melissa Davis</h4>
             
-            <h4 data-toc-skip class="date">2023-09-15</h4>
+            <h4 data-toc-skip class="date">2023-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DavisLaboratory/hoodscanR/blob/HEAD/vignettes/Quick_start.Rmd" class="external-link"><code>vignettes/Quick_start.Rmd</code></a></small>
       <div class="d-none name"><code>Quick_start.Rmd</code></div>
@@ -94,7 +94,7 @@ Melissa Davis</h4>
 <p>hoodscanR is an user-friendly R package providing functions to assist
 cellular neighborhood analysis of any spatial transcriptomics data with
 single-cell resolution.</p>
-<p>All functions in the package are built based on the SpatialExperiment
+<p>All functions in the package are built based on the <em><a href="https://bioconductor.org/packages/3.17/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
 infrastructure, allowing integration into various spatial
 transcriptomics-related packages from Bioconductor. The package can
 result in cell-level neighborhood annotation output, along with funtions
@@ -109,7 +109,7 @@ cell clustering.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"hoodscanR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"hoodscanR"</span><span class="op">)</span></span></code></pre></div>
 <p>The development version of <code>hoodscanR</code> can be installed
 from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -126,6 +126,9 @@ from GitHub:</p>
 <div class="section level2">
 <h2 id="data-exploration">Data exploration<a class="anchor" aria-label="anchor" href="#data-exploration"></a>
 </h2>
+<p>The <code>readHoodData</code> function can format the
+spatialExperiment input object as desired for all other functions in the
+<code>hoodscanR</code> package.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"spe_test"</span><span class="op">)</span></span>
 <span></span>
@@ -190,7 +193,9 @@ annotations.</p>
 <h2 id="neighborhoods-scanning">Neighborhoods scanning<a class="anchor" aria-label="anchor" href="#neighborhoods-scanning"></a>
 </h2>
 <p>In order to perform neighborhood scanning, we need to firstly
-identify k (in this example, k = 100) nearest cells for each cells.</p>
+identify k (in this example, k = 100) nearest cells for each cells. The
+searching algorithm is based on Approximate Near Neighbor (ANN) C++
+library from the RANN package.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fnc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findNearCells.html">findNearCells</a></span><span class="op">(</span><span class="va">spe</span>, k <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 <p>The output of <code>findNearCells</code> function includes two
@@ -245,11 +250,12 @@ matrix, an annotation matrix and a distance matrix.</p>
 <span><span class="co">## Lung9_Rep1_5_22        69.8570</span></span>
 <span><span class="co">## Lung9_Rep1_5_25       276.8267</span></span></code></pre>
 <p>We can then perform neighborhood analysis using the function
-<code>scanHoods</code>.</p>
+<code>scanHoods</code>. This function incldue the modified softmax
+algorithm, aimming to genereate a matrix with the probability of each
+cell associating with their 100 nearest cells.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scanHoods.html">scanHoods</a></span><span class="op">(</span><span class="va">fnc</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span></code></pre></div>
-<p>The resulting matrix is the probability of each cell associating with
-their 100 nearest cells.</p>
+<p>The resulting</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pm</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##                 nearest_cell_1 nearest_cell_2 nearest_cell_3 nearest_cell_4</span></span>
@@ -278,6 +284,8 @@ their 100 nearest cells.</p>
 nearest cells.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hoods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mergeByGroup.html">mergeByGroup</a></span><span class="op">(</span><span class="va">pm</span>, <span class="va">fnc</span><span class="op">$</span><span class="va">cells</span><span class="op">)</span></span></code></pre></div>
+<p>Now we have the final probability distribution of each cell all each
+neighborhood.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hoods</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##                 Dividing.cells Endothelial.cell Epithelial.cell  Immune.cell</span></span>
@@ -307,7 +315,10 @@ nearest cells.</p>
 <h2 id="neighborhoods-analysis">Neighborhoods analysis<a class="anchor" aria-label="anchor" href="#neighborhoods-analysis"></a>
 </h2>
 <p>We plot randomly plot 10 cells to see the output of neighborhood
-scanning using <code>plotHoodMat</code>.</p>
+scanning using <code>plotHoodMat</code>. In this plot, each value
+represent the probability of the each cell (each row) located in each
+cell type neighborhood. The rowSums of the probability maxtrix will
+always be 1.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotHoodMat.html">plotHoodMat</a></span><span class="op">(</span><span class="va">hoods</span>, n <span class="op">=</span> <span class="fl">10</span>, hm_height <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Quick_start_files/figure-html/unnamed-chunk-15-1.png" width="400"></p>
@@ -323,13 +334,19 @@ neighborhood-related analysis.</p>
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mergeHoodSpe.html">mergeHoodSpe</a></span><span class="op">(</span><span class="va">spe</span>, <span class="va">hoods</span><span class="op">)</span></span></code></pre></div>
 <p>To summarise our neighborhood results, we can use
 <code>calcMetrics</code> to calculate entropy and perplexity of the
-probability matrix so that we can have a summarisatino of the
+probability matrix so that we can have a summarisation of the
 neighborhood distribution across the tissue slide, i.e. where
 neighborhood is more distinct and where is more mixed.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcMetrics.html">calcMetrics</a></span><span class="op">(</span><span class="va">spe</span>, pm_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hoods</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We then again use <code>plotTissue</code> to plot out the entropy or
 perplexity.</p>
+<p>While both entropy and perplexity measure the mixture of neighborhood
+of each cell, perplexity can be more intuitive for the human mind as the
+value of it actually mean something. For example, perplexity of 1 means
+the cell is located in a very distinct neighborhood, perplexity of 2
+means the cell is located in a mixed neighborhood, and the probability
+is about 50% to 50%.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotTissue.html">plotTissue</a></span><span class="op">(</span><span class="va">spe</span>, size <span class="op">=</span> <span class="fl">1.5</span>, color <span class="op">=</span> <span class="va">entropy</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/scico/man/ggplot2-scales.html" class="external-link">scale_color_scico</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"tokyo"</span><span class="op">)</span></span></code></pre></div>
@@ -339,9 +356,10 @@ perplexity.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/scico/man/ggplot2-scales.html" class="external-link">scale_color_scico</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"tokyo"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Quick_start_files/figure-html/unnamed-chunk-20-1.png" width="560"></p>
 <p>We can perform neighborhood colocalization analysis using
-<code>plotColocal</code>. Here we can see in the test data, endothelial
-cells and stromal cells are more likely to colocalize, epithelial cells
-and dividing cells are more likely to colocalize.</p>
+<code>plotColocal</code>. This function compute pearson correlation on
+the probability distribution of each cell. Here we can see in the test
+data, endothelial cells and stromal cells are more likely to colocalize,
+epithelial cells and dividing cells are more likely to colocalize.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotColocal.html">plotColocal</a></span><span class="op">(</span><span class="va">spe</span>, pm_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">hoods</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Quick_start_files/figure-html/unnamed-chunk-21-1.png" width="480"></p>
@@ -392,9 +410,10 @@ cluster using <code>plotProbDist</code>.</p>
 <span><span class="co">##  [3] SingleCellExperiment_1.22.0 SummarizedExperiment_1.30.2</span></span>
 <span><span class="co">##  [5] Biobase_2.60.0              GenomicRanges_1.52.0       </span></span>
 <span><span class="co">##  [7] GenomeInfoDb_1.36.3         IRanges_2.34.1             </span></span>
-<span><span class="co">##  [9] S4Vectors_0.38.1            BiocGenerics_0.46.0        </span></span>
+<span><span class="co">##  [9] S4Vectors_0.38.2            BiocGenerics_0.46.0        </span></span>
 <span><span class="co">## [11] MatrixGenerics_1.12.3       matrixStats_1.0.0          </span></span>
-<span><span class="co">## [13] hoodscanR_0.99.1            ggplot2_3.4.3              </span></span>
+<span><span class="co">## [13] hoodscanR_0.99.2            ggplot2_3.4.3              </span></span>
+<span><span class="co">## [15] BiocStyle_2.28.1           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] bitops_1.0-7              rlang_1.1.1              </span></span>
@@ -407,44 +426,45 @@ cluster using <code>plotProbDist</code>.</p>
 <span><span class="co">## [15] fastmap_1.1.1             magick_2.7.5             </span></span>
 <span><span class="co">## [17] XVector_0.40.0            scuttle_1.10.2           </span></span>
 <span><span class="co">## [19] labeling_0.4.3            utf8_1.2.3               </span></span>
-<span><span class="co">## [21] rmarkdown_2.24            ragg_1.2.5               </span></span>
+<span><span class="co">## [21] rmarkdown_2.25            ragg_1.2.5               </span></span>
 <span><span class="co">## [23] purrr_1.0.2               xfun_0.40                </span></span>
 <span><span class="co">## [25] zlibbioc_1.46.0           cachem_1.0.8             </span></span>
 <span><span class="co">## [27] beachmat_2.16.0           jsonlite_1.8.7           </span></span>
 <span><span class="co">## [29] rhdf5filters_1.12.1       DelayedArray_0.26.7      </span></span>
 <span><span class="co">## [31] Rhdf5lib_1.22.1           BiocParallel_1.34.2      </span></span>
 <span><span class="co">## [33] cluster_2.1.4             parallel_4.3.1           </span></span>
-<span><span class="co">## [35] R6_2.5.1                  bslib_0.5.1              </span></span>
-<span><span class="co">## [37] stringi_1.7.12            RColorBrewer_1.1-3       </span></span>
+<span><span class="co">## [35] R6_2.5.1                  RColorBrewer_1.1-3       </span></span>
+<span><span class="co">## [37] bslib_0.5.1               stringi_1.7.12           </span></span>
 <span><span class="co">## [39] limma_3.56.2              jquerylib_0.1.4          </span></span>
-<span><span class="co">## [41] Rcpp_1.0.11               iterators_1.0.14         </span></span>
-<span><span class="co">## [43] knitr_1.44                R.utils_2.12.2           </span></span>
-<span><span class="co">## [45] Matrix_1.5-4.1            tidyselect_1.2.0         </span></span>
-<span><span class="co">## [47] abind_1.4-5               yaml_2.3.7               </span></span>
-<span><span class="co">## [49] doParallel_1.0.17         codetools_0.2-19         </span></span>
-<span><span class="co">## [51] lattice_0.21-8            tibble_3.2.1             </span></span>
-<span><span class="co">## [53] withr_2.5.0               evaluate_0.21            </span></span>
-<span><span class="co">## [55] desc_1.4.2                circlize_0.4.15          </span></span>
-<span><span class="co">## [57] pillar_1.9.0              foreach_1.5.2            </span></span>
-<span><span class="co">## [59] generics_0.1.3            rprojroot_2.0.3          </span></span>
-<span><span class="co">## [61] RCurl_1.98-1.12           sparseMatrixStats_1.12.2 </span></span>
-<span><span class="co">## [63] munsell_0.5.0             scales_1.2.1             </span></span>
-<span><span class="co">## [65] glue_1.6.2                tools_4.3.1              </span></span>
-<span><span class="co">## [67] locfit_1.5-9.8            RANN_2.6.1               </span></span>
-<span><span class="co">## [69] fs_1.6.3                  rhdf5_2.44.0             </span></span>
-<span><span class="co">## [71] grid_4.3.1                DropletUtils_1.20.0      </span></span>
-<span><span class="co">## [73] edgeR_3.42.4              colorspace_2.1-0         </span></span>
-<span><span class="co">## [75] GenomeInfoDbData_1.2.10   HDF5Array_1.28.1         </span></span>
-<span><span class="co">## [77] cli_3.6.1                 textshaping_0.3.6        </span></span>
-<span><span class="co">## [79] fansi_1.0.4               S4Arrays_1.0.6           </span></span>
-<span><span class="co">## [81] ComplexHeatmap_2.16.0     dplyr_1.1.3              </span></span>
-<span><span class="co">## [83] gtable_0.3.4              R.methodsS3_1.8.2        </span></span>
-<span><span class="co">## [85] sass_0.4.7                digest_0.6.33            </span></span>
-<span><span class="co">## [87] dqrng_0.3.1               rjson_0.2.21             </span></span>
-<span><span class="co">## [89] farver_2.1.1              memoise_2.0.1            </span></span>
-<span><span class="co">## [91] htmltools_0.5.6           pkgdown_2.0.7            </span></span>
-<span><span class="co">## [93] R.oo_1.25.0               lifecycle_1.0.3          </span></span>
-<span><span class="co">## [95] GlobalOptions_0.1.2</span></span></code></pre>
+<span><span class="co">## [41] Rcpp_1.0.11               bookdown_0.35            </span></span>
+<span><span class="co">## [43] iterators_1.0.14          knitr_1.44               </span></span>
+<span><span class="co">## [45] R.utils_2.12.2            Matrix_1.5-4.1           </span></span>
+<span><span class="co">## [47] tidyselect_1.2.0          abind_1.4-5              </span></span>
+<span><span class="co">## [49] yaml_2.3.7                doParallel_1.0.17        </span></span>
+<span><span class="co">## [51] codetools_0.2-19          lattice_0.21-8           </span></span>
+<span><span class="co">## [53] tibble_3.2.1              withr_2.5.0              </span></span>
+<span><span class="co">## [55] evaluate_0.21             desc_1.4.2               </span></span>
+<span><span class="co">## [57] circlize_0.4.15           pillar_1.9.0             </span></span>
+<span><span class="co">## [59] BiocManager_1.30.22       foreach_1.5.2            </span></span>
+<span><span class="co">## [61] generics_0.1.3            rprojroot_2.0.3          </span></span>
+<span><span class="co">## [63] RCurl_1.98-1.12           sparseMatrixStats_1.12.2 </span></span>
+<span><span class="co">## [65] munsell_0.5.0             scales_1.2.1             </span></span>
+<span><span class="co">## [67] glue_1.6.2                tools_4.3.1              </span></span>
+<span><span class="co">## [69] locfit_1.5-9.8            RANN_2.6.1               </span></span>
+<span><span class="co">## [71] fs_1.6.3                  rhdf5_2.44.0             </span></span>
+<span><span class="co">## [73] grid_4.3.1                DropletUtils_1.20.0      </span></span>
+<span><span class="co">## [75] edgeR_3.42.4              colorspace_2.1-0         </span></span>
+<span><span class="co">## [77] GenomeInfoDbData_1.2.10   HDF5Array_1.28.1         </span></span>
+<span><span class="co">## [79] cli_3.6.1                 textshaping_0.3.6        </span></span>
+<span><span class="co">## [81] fansi_1.0.4               S4Arrays_1.0.6           </span></span>
+<span><span class="co">## [83] ComplexHeatmap_2.16.0     dplyr_1.1.3              </span></span>
+<span><span class="co">## [85] gtable_0.3.4              R.methodsS3_1.8.2        </span></span>
+<span><span class="co">## [87] sass_0.4.7                digest_0.6.33            </span></span>
+<span><span class="co">## [89] dqrng_0.3.1               rjson_0.2.21             </span></span>
+<span><span class="co">## [91] farver_2.1.1              memoise_2.0.1            </span></span>
+<span><span class="co">## [93] htmltools_0.5.6           pkgdown_2.0.7            </span></span>
+<span><span class="co">## [95] R.oo_1.25.0               lifecycle_1.0.3          </span></span>
+<span><span class="co">## [97] GlobalOptions_0.1.2</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

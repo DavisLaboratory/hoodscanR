@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hoodscanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,17 @@ SpatialExperiment input. Assuming that the probability is stored in the colData.
     
 
 <p>A SpatialExperiment object. Calculated entropy and perplexity are
-saved as columns in the colData of the SpatialExperiment object.</p>
+saved as columns in the colData of the SpatialExperiment object.
+Entropy and perplexity are calculated based on information theory:</p>
+
+
+<p>P(x) is the probability calculated from the scanHoods function.</p>
+
+
+<p>Entropy H(x) = -P(x)log2(P(x))</p>
+
+
+<p>Perplexity P(x) = 2^H(x)</p>
     </div>
 
     <div class="section level2">
