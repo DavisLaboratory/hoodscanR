@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hoodscanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,8 @@
 <span>  k <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  iter_max <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  nstart <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  algo <span class="op">=</span> <span class="st">"Hartigan-Wong"</span></span>
+<span>  algo <span class="op">=</span> <span class="st">"Hartigan-Wong"</span>,</span>
+<span>  val_names <span class="op">=</span> <span class="st">"clusters"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -97,11 +98,17 @@
 
 <dt>pm_cols</dt>
 <dd><p>The colnames of probability matrix. This is requires for
-SpatialExperiment input. Assuming that the probability is stored in the colData.</p></dd>
+SpatialExperiment input. Assuming that the probability is
+stored in the colData.</p></dd>
 
 
 <dt>algo</dt>
-<dd><p>Algorithm to be used. Options include Hartigan-Wong, Lloyd, and MacQueen.</p></dd>
+<dd><p>Algorithm to be used. Options include
+Hartigan-Wong, Lloyd, and MacQueen.</p></dd>
+
+
+<dt>val_names</dt>
+<dd><p>Character. Column names used to store the clusters.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -109,7 +116,8 @@ SpatialExperiment input. Assuming that the probability is stored in the colData.
     
 
 <p>A probability matrix or a SpatialExperiment object. For latter,
-the clustering results are saved in the colData of the SpatialExperiment object.</p>
+the clustering results are saved in the colData of
+the SpatialExperiment object.</p>
     </div>
 
     <div class="section level2">
