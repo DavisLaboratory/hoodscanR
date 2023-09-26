@@ -4,8 +4,6 @@
 \name{clustByHood}
 \alias{clustByHood}
 \alias{clustByHood,matrix-method}
-\alias{clustByHood,}
-\alias{SpatialExperiment-method}
 \alias{clustByHood,SpatialExperiment-method}
 \title{Cluster the probability matrix with K-means}
 \usage{

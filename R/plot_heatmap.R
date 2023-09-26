@@ -23,8 +23,7 @@
 #' @docType methods
 #' @rdname plotColocal
 #'
-#' @aliases plotColocal plotColocal, matrix-method
-#' @aliases plotColocal, SpatialExperiment-method plotColocal
+#' @aliases plotColocal plotColocal,matrix-method plotColocal,SpatialExperiment-method
 #'
 #' @examples
 #'

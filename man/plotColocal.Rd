@@ -3,9 +3,6 @@
 \docType{methods}
 \name{plotColocal}
 \alias{plotColocal}
-\alias{plotColocal,}
-\alias{matrix-method}
-\alias{SpatialExperiment-method}
 \alias{plotColocal,matrix-method}
 \alias{plotColocal,SpatialExperiment-method}
 \title{Plot heatmap for neighbourhood analysis}

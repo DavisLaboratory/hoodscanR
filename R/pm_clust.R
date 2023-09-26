@@ -20,8 +20,7 @@
 #' @docType methods
 #' @name clustByHood
 #' @rdname clustByHood
-#' @aliases clustByHood clustByHood,matrix-method clustByHood,
-#' SpatialExperiment-method
+#' @aliases clustByHood clustByHood,matrix-method clustByHood,SpatialExperiment-method
 #'
 #' @examples
 #'
