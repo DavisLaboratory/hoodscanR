@@ -4,6 +4,8 @@
 \name{clustByHood}
 \alias{clustByHood}
 \alias{clustByHood,matrix-method}
+\alias{clustByHood,}
+\alias{SpatialExperiment-method}
 \alias{clustByHood,SpatialExperiment-method}
 \title{Cluster the probability matrix with K-means}
 \usage{
@@ -17,7 +19,8 @@ clustByHood(object, ...)
   k = 0,
   iter_max = 1000,
   nstart = 5,
-  algo = "Hartigan-Wong"
+  algo = "Hartigan-Wong",
+  val_names = "clusters"
 )
 }
 \arguments{
@@ -32,13 +35,18 @@ clustByHood(object, ...)
 \item{nstart}{how many random sets should be chosen.}
 
 \item{pm_cols}{The colnames of probability matrix. This is requires for
-SpatialExperiment input. Assuming that the probability is stored in the colData.}
+SpatialExperiment input. Assuming that the probability is
+stored in the colData.}
 
-\item{algo}{Algorithm to be used. Options include Hartigan-Wong, Lloyd, and MacQueen.}
+\item{algo}{Algorithm to be used. Options include
+Hartigan-Wong, Lloyd, and MacQueen.}
+
+\item{val_names}{Character. Column names used to store the clusters.}
 }
 \value{
 A probability matrix or a SpatialExperiment object. For latter,
-the clustering results are saved in the colData of the SpatialExperiment object.
+the clustering results are saved in the colData of
+the SpatialExperiment object.
 }
 \description{
 Cluster the probability matrix with K-means

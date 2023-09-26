@@ -4,7 +4,7 @@
 \alias{calcMetrics}
 \title{Calculate metrics for probability matrix}
 \usage{
-calcMetrics(spe, pm = NA, pm_cols = NA)
+calcMetrics(spe, pm = NA, pm_cols = NA, val_names = c("entropy", "perplexity"))
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
@@ -12,7 +12,11 @@ calcMetrics(spe, pm = NA, pm_cols = NA)
 \item{pm}{Optional. The probability matrix.}
 
 \item{pm_cols}{The colnames of probability matrix. This is requires for
-SpatialExperiment input. Assuming that the probability is stored in the colData.}
+SpatialExperiment input. Assuming that the probability is
+stored in the colData.}
+
+\item{val_names}{Character vector with length of 2. Column names
+used to store calculated entropy and perplexity.}
 }
 \value{
 A SpatialExperiment object. Calculated entropy and perplexity are
@@ -24,6 +28,10 @@ P(x) is the probability calculated from the scanHoods function.
 Entropy H(x) = -P(x)log2(P(x))
 
 Perplexity P(x) = 2^H(x)
+
+By default, the calculated entropy and perplexity will be stored
+in the colData of the input spe, with column name as entropy and
+perplexity.
 }
 \description{
 Calculate metrics for probability matrix

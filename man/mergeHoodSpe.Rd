@@ -4,12 +4,14 @@
 \alias{mergeHoodSpe}
 \title{Merge probability matrix into SpatialExperiment object.}
 \usage{
-mergeHoodSpe(spe, pm)
+mergeHoodSpe(spe, pm, val_names = NULL)
 }
 \arguments{
 \item{spe}{A SpatialExperiment object.}
 
 \item{pm}{Probability matrix. Can be obtained by the function mergeByGroup.}
+
+\item{val_names}{Character vector with length of the ncol of pm.}
 }
 \value{
 A SpatialExperiment object. Cell-level neighborhood information are

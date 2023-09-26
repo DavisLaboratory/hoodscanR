@@ -3,7 +3,10 @@
 #' @param spe A SpatialExperiment object.
 #' @param pm Optional. The probability matrix.
 #' @param pm_cols The colnames of probability matrix. This is requires for
-#' SpatialExperiment input. Assuming that the probability is stored in the colData.
+#' SpatialExperiment input. Assuming that the probability is 
+#' stored in the colData.
+#' @param val_names Character vector with length of 2. Column names
+#' used to store calculated entropy and perplexity.
 #'
 #' @return A SpatialExperiment object. Calculated entropy and perplexity are
 #' saved as columns in the colData of the SpatialExperiment object.
@@ -14,6 +17,10 @@
 #' Entropy H(x) = -P(x)log2(P(x))
 #' 
 #' Perplexity P(x) = 2^H(x)
+#' 
+#' By default, the calculated entropy and perplexity will be stored
+#' in the colData of the input spe, with column name as entropy and
+#' perplexity.
 #' 
 #' @export
 #'
@@ -33,7 +40,8 @@
 #'
 #' spe <- calcMetrics(spe, pm_cols = colnames(pm2))
 #'
-calcMetrics <- function(spe, pm = NA, pm_cols = NA) {
+calcMetrics <- function(spe, pm = NA, pm_cols = NA,
+                        val_names = c("entropy","perplexity")) {
   if (!is(spe, "SpatialExperiment")){
     stop("The input spe must be a SpatialExperiment object.")
   }
@@ -49,10 +57,8 @@ calcMetrics <- function(spe, pm = NA, pm_cols = NA) {
   }
 
   result <- calculate_metrics(pm)
-
-  for (i in colnames(result)) {
-    colData(spe)[, i] <- result[, i]
-  }
+  
+  colData(spe)[, val_names] <- result
 
   return(spe)
 }

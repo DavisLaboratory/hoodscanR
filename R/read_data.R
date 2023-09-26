@@ -69,6 +69,11 @@ readHoodData <- function(spe = NA, anno_col = NA,
     colnames(col_dat)[colnames(col_dat) == anno_col] <- "cell_annotation"
 
     if (is(spe, "SpatialExperiment")) {
+      
+      if (is.null(SpatialExperiment::spatialCoordsNames(spe))){
+        stop("Coordinates are not found in the spatialCoords of spe.")
+      }
+      
       if (is(pos_col, "logical")) {
         pos_dat <- spatialCoords(spe)
         colnames(pos_dat) <- c("x", "y")

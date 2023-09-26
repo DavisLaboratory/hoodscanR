@@ -38,11 +38,16 @@ mergeByGroup <- function(pm, group_df) {
   out_df <- matrix(nrow = nrow(pm), ncol = length(uniquegroups))
   colnames(out_df) <- uniquegroups
   rownames(out_df) <- rownames(df)
-  for (g in uniquegroups) {
-    mask <- (group_df == g) |> `storage.mode<-`("numeric")
 
-    out_df[, g] <- rowSums(mask * pm)[rownames(df)]
-  }
+  out_df <- vapply(uniquegroups, \(g) {
+    mask <- 1 * (group_df == g)
+    rowSums(mask * pm)[rownames(df)]
+  }, numeric(nrow(df)))
+  
+  # for (g in uniquegroups) {
+  #   mask <- (group_df == g) |> `storage.mode<-`("numeric")
+  #   out_df[, g] <- rowSums(mask * pm)[rownames(df)]
+  # }
 
   out_df[is.na(out_df)] <- 0
 
