@@ -1,3 +1,7 @@
+# hoodscanR 0.99.5
+
+Remove codes that are commented out.
+
 # hoodscanR 0.99.4
 
 ### user perspective/experience
