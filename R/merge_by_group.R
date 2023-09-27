@@ -43,11 +43,6 @@ mergeByGroup <- function(pm, group_df) {
     mask <- 1 * (group_df == g)
     rowSums(mask * pm)[rownames(df)]
   }, numeric(nrow(df)))
-  
-  # for (g in uniquegroups) {
-  #   mask <- (group_df == g) |> `storage.mode<-`("numeric")
-  #   out_df[, g] <- rowSums(mask * pm)[rownames(df)]
-  # }
 
   out_df[is.na(out_df)] <- 0
 
