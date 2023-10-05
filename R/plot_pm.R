@@ -67,7 +67,7 @@ setMethod(
   function(object, pm_cols, targetCells = NA, n = 30,
            hm_width = 4, hm_height = 15, clusterRows = TRUE, clusterCols = TRUE,
            title = "Probability of neighborhoods") {
-    dat <- as.data.frame(colData(object))
+    dat <- as.data.frame(colData(object), optional = TRUE)
     dat <- dat[, pm_cols]
 
     if (is(targetCells, "logical")) {

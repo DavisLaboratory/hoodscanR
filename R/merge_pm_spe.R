@@ -23,6 +23,7 @@
 #' spe <- mergeHoodSpe(spe, pm2)
 #'
 mergeHoodSpe <- function(spe, pm, val_names = NULL) {
+  
   if (!(all(rownames(pm) == colnames(spe)))) {
     pm <- pm[colnames(spe), ]
   }
