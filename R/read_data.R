@@ -54,7 +54,8 @@ readHoodData <- function(spe = NA, anno_col = NA,
     colnames(dummy_exp_m) <- cell_pos_dat$cell_id
     rownames(dummy_exp_m) <- paste0("gene_", seq(10))
     spe_n <- SpatialExperiment::SpatialExperiment(
-      assay = list("counts" = as.data.frame(dummy_exp_m)),
+      assay = list("counts" = as.data.frame(dummy_exp_m, 
+                                            optional = TRUE)),
       colData = cell_anno_dat |> col2rownames("cell_id"),
       spatialCoords = cell_pos_dat |> col2rownames("cell_id") |>
         as.matrix(),
@@ -65,7 +66,7 @@ readHoodData <- function(spe = NA, anno_col = NA,
       stop("anno_col is not in the colData of spe.")
     }
 
-    col_dat <- as.data.frame(colData(spe))
+    col_dat <- as.data.frame(colData(spe), optional = TRUE)
     colnames(col_dat)[colnames(col_dat) == anno_col] <- "cell_annotation"
 
     if (is(spe, "SpatialExperiment")) {
@@ -81,7 +82,8 @@ readHoodData <- function(spe = NA, anno_col = NA,
         if (!all(pos_col %in% colnames(colData(spe)))) {
           stop("pos_col is not in the colData of spe.")
         }
-        pos_dat <- as.data.frame(colData(spe))[, pos_col]
+        pos_dat <- as.data.frame(colData(spe), 
+                                 optional = TRUE)[, pos_col]
         colnames(pos_dat) <- c("x", "y")
         pos_dat <- as.matrix(pos_dat)
       }
@@ -94,13 +96,15 @@ readHoodData <- function(spe = NA, anno_col = NA,
       if (!all(pos_col %in% colnames(colData(spe)))) {
         stop("pos_col is not in the colData of spe.")
       }
-      pos_dat <- as.data.frame(colData(spe))[, pos_col]
+      pos_dat <- as.data.frame(colData(spe), 
+                               optional = TRUE)[, pos_col]
       colnames(pos_dat) <- c("x", "y")
       pos_dat <- as.matrix(pos_dat)
     }
 
     spe_n <- SpatialExperiment::SpatialExperiment(
-      assay = list("counts" = as.data.frame(as.matrix(assay(spe, "counts")))),
+      assay = list("counts" = as.data.frame(as.matrix(assay(spe, "counts")),
+                                            optional = TRUE)),
       colData = col_dat,
       spatialCoords = pos_dat,
       metadata = list("dummy" = 0)

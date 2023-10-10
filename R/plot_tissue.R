@@ -46,13 +46,14 @@ plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
   }
 
   toplot <- SpatialExperiment::spatialCoords(spe) |>
-    as.data.frame()
+    as.data.frame(optional = TRUE)
 
   colnames(toplot) <- c("x", "y")
 
 
 
-  cdata <- as.data.frame(SummarizedExperiment::colData(spe))
+  cdata <- as.data.frame(SummarizedExperiment::colData(spe), 
+                         optional = TRUE)
 
   if ("cell_id" %in% colnames(cdata)) {
     cdata <- cdata[,!(colnames(cdata) %in% cell_id)]

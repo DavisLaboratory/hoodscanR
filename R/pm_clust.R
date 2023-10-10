@@ -53,7 +53,7 @@ setMethod(
   function(object, pm_cols, k = 0,
            iter_max = 1000, nstart = 5,
            algo = "Hartigan-Wong", val_names = "clusters") {
-    dat <- as.data.frame(colData(object))
+    dat <- as.data.frame(colData(object), optional = TRUE)
 
     if (!all(pm_cols %in% colnames(dat))) {
       stop("The pm_cols are not included in the SpatialExperiment.")

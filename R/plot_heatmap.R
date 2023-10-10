@@ -68,7 +68,7 @@ setMethod(
   function(object, pm_cols, self_cor = TRUE, by_group = NULL, hm_width = 5,
            hm_height = 5, cluster_row = TRUE, cluster_col = TRUE,
            return_matrix = FALSE) {
-    dat <- as.data.frame(colData(object))
+    dat <- as.data.frame(colData(object), optional = TRUE)
 
     if (!all(pm_cols %in% colnames(dat))) {
       stop("The pm_cols are not included in the SpatialExperiment.")
@@ -87,7 +87,7 @@ setMethod(
         datx <- dat[, c(pm_cols, by_group)]
         
         cor.m <- mean_by_group(datx, by_group) |>
-          as.data.frame() |>
+          as.data.frame(optional = TRUE) |>
           col2rownames(by_group) |>
           as.matrix()
         ht <- plotColocal_intl(cor.m,

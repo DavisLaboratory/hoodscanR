@@ -67,7 +67,7 @@ setMethod(
   function(object, pm_cols, targetCells = NA, by_cluster = FALSE,
            show_clusters = as.character(seq(6)), plot_all = FALSE,
            sample_size = 2, ...) {
-    dat <- as.data.frame(colData(object))
+    dat <- as.data.frame(colData(object), optional = TRUE)
 
     if (!all(pm_cols %in% colnames(dat))) {
       stop("The pm_cols are not included in the SpatialExperiment.")
@@ -84,7 +84,7 @@ setMethod(
 
       dat <- dat[, c(pm_cols, "clusters")]
 
-      dat <- as.data.frame(dat) |>
+      dat <- as.data.frame(dat, optional = TRUE) |>
         rownames2col("cells")
       
       dat <- dat[dat$clusters %in% show_clusters,]
@@ -139,12 +139,12 @@ sample_rows <- function(df, group_var, sample_size) {
 
 format_dat <- function(object, targetCells = NULL, cols2ex = "cells"){
   
-  dat <- as.data.frame(object) |>
+  dat <- as.data.frame(object, optional = TRUE) |>
     rownames2col("cells")
   if (is.null(targetCells)){
     filtered_dat <- dat
   } else {
-    dat <- as.data.frame(object) |>
+    dat <- as.data.frame(object, optional = TRUE) |>
       rownames2col("cells")
     filtered_dat <- dat[dat$cells %in% targetCells, ]
   }

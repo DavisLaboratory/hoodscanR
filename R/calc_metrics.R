@@ -49,7 +49,8 @@ calcMetrics <- function(spe, pm = NA, pm_cols = NA,
     if (is(pm_cols, "logical")) {
       stop("Need to input either the pm or pm_cols parameters.")
     } else {
-      pm <- as.data.frame(colData(spe))[, pm_cols] |>
+      pm <- as.data.frame(colData(spe), 
+                          optional = TRUE)[, pm_cols] |>
         as.matrix()
     }
   } else {
