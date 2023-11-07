@@ -90,7 +90,7 @@ setMethod(
       dat <- dat[dat$clusters %in% show_clusters,]
 
       if (isTRUE(plot_all)) {
-        p <- plotProbDist_box_intl(dat, pm_cols) +
+        p <- plotProbDist_box_intl(dat, pm_cols, ...) +
           facet_wrap(~clusters)
       } else {
         
