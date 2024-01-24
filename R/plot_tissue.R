@@ -56,7 +56,7 @@ plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
                          optional = TRUE)
 
   if ("cell_id" %in% colnames(cdata)) {
-    cdata <- cdata[,!(colnames(cdata) %in% cell_id)]
+    cdata <- cdata[,!(colnames(cdata) %in% "cell_id")]
   }
 
   toplot <- toplot |>
