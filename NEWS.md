@@ -1,3 +1,13 @@
+# hoodscanR 1.1.1
+
+Small bug fix:
+
+- when data have cell_id within the colData.
+
+# hoodscanR 1.1.0
+
+Published in Bioconductor.
+
 # hoodscanR 0.99.5
 
 Remove codes that are commented out.
