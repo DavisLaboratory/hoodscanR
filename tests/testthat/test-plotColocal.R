@@ -5,9 +5,12 @@ test_that("Testing plotColocal", {
   pm <- scanHoods(fnc$distance)
   pm2 <- mergeByGroup(pm, fnc$cells)
   spe <- mergeHoodSpe(spe, pm2)
-
-  expect_silent(plotColocal(spe, pm_cols = colnames(pm2)))
   
-  expect_silent(plotColocal(spe, pm_cols = colnames(pm2), self_cor = FALSE, by_group = "cell_annotation"))
+  p <- plotColocal(spe, pm_cols = colnames(pm2))
+  
+  expect_s4_class(p, "HeatmapList")
+  
+  p <- plotColocal(spe, pm_cols = colnames(pm2), self_cor = FALSE, by_group = "cell_annotation")
+  expect_s4_class(p, "HeatmapList")
 
 })
