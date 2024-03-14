@@ -1,3 +1,7 @@
+# hoodscanR 1.1.2
+
+Fix bugs in test with R4.4
+
 # hoodscanR 1.1.1
 
 Small bug fix:
