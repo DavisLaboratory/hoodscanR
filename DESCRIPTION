@@ -1,6 +1,5 @@
 Package: hoodscanR
 Title: Spatial cellular neighbourhood scanning in R
-<<<<<<< HEAD
 Version: 1.2.1
 Authors@R: 
     c(person(given = "Ning",
