@@ -21,6 +21,15 @@ Key visualisation functions include
 \code{\link{plotTissue}, \link{plotHoodMat}, \link{plotColocal},
 \link{plotProbDist}}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/DavisLaboratory/hoodscanR}
+  \item \url{https://davislaboratory.github.io/hoodscanR/}
+  \item Report bugs at \url{https://github.com/DavisLaboratory/hoodscanR/issues}
+}
+
+}
 \author{
 Ning Liu \email{liu.n@wehi.edu.au}
 }

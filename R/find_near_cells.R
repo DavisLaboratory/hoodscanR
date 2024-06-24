@@ -35,6 +35,10 @@ findNearCells <- function(dat, k = 100, targetCell = FALSE,
     stop("Coordinates are not found in the spatialCoords of spe.")
   }
 
+  if (is.null(rownames(SpatialExperiment::spatialCoords(dat)))){
+    rownames(SpatialExperiment::spatialCoords(dat)) <- colnames(dat)
+  }
+    
   cell_pos_dat <- SpatialExperiment::spatialCoords(dat)
   colnames(cell_pos_dat) <- c("x", "y")
 

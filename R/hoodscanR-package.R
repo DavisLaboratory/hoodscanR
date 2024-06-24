@@ -37,11 +37,10 @@ NULL
 #' @docType package
 #' @aliases hoodscanR hoodscanR-package
 #' @keywords internal
-#' 
 #'
 #' @useDynLib hoodscanR
 #'
-NULL
+"_PACKAGE"
 
 
 #' Example test spatial transcriptomics data
