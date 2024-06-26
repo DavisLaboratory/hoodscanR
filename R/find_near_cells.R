@@ -46,7 +46,7 @@ findNearCells <- function(dat, k = 100, targetCell = FALSE,
     anno_col <- "cell_annotation"
   }
 
-  cell_annotation <- SummarizedExperiment::colData(dat)[, anno_col]
+  cell_annotation <- as.character(SummarizedExperiment::colData(dat)[, anno_col])
 
   query <- targetCell
 
@@ -63,7 +63,7 @@ findNearCells <- function(dat, k = 100, targetCell = FALSE,
 
   searchcells <- RANN::nn2(data = cell_pos_dat, query = query,
                            k = k + 1, searchtype = "priority")
-
+  
   closest <- searchcells[[1]]
 
   idxcell <- closest[, 1]
