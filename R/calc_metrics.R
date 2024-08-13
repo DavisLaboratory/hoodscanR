@@ -121,18 +121,16 @@ perplexityPermute <- function(spe, pm = NA, pm_cols = NA, n_perm = 1000) {
     permuted_perplexities <- matrix(NA, nrow(pm), n_perm)
     
     for (i in 1:n_perm) {
+        cat("\rGenerating permutation", i, "of", n_perm)
         permuted_matrix <- pm[sample(1:nrow(pm)), ]
         permuted_perplexities[, i] <- .get_perplexity(permuted_matrix)
+        
+        utils::flush.console()
     }
     
-    p_values <- apply(as.matrix(observed_perplexity), 1, function(obs) {
-        mean(permuted_perplexities >= obs)
-    })
-    
-    adjp <- stats::p.adjust(p_values, method = "BH")
+    p_values <- (rowSums(permuted_perplexities <= observed_perplexity) + 1) / (n_perm + 1)
     
     colData(spe)[,"perplexity_p"] <- p_values
-    colData(spe)[,"perplexity_adjp"] <- adjp
     
     return(spe)
 }
