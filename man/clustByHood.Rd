@@ -18,7 +18,7 @@ clustByHood(object, ...)
   iter_max = 1000,
   nstart = 5,
   algo = "Hartigan-Wong",
-  val_names = "clusters"
+  val_name = "clusters"
 )
 }
 \arguments{
@@ -39,7 +39,7 @@ stored in the colData.}
 \item{algo}{Algorithm to be used. Options include
 Hartigan-Wong, Lloyd, and MacQueen.}
 
-\item{val_names}{Character. Column names used to store the clusters.}
+\item{val_name}{Character. Column name used to store the clusters.}
 }
 \value{
 A probability matrix or a SpatialExperiment object. For latter,

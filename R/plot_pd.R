@@ -10,6 +10,7 @@
 #' plot instead of bar plot to show all cells in each cluster.
 #' @param sample_size Integer. By default is 2, sampling two cell from each
 #' cluster to be plotted.
+#' @param val_name Character. Column name used to store the clusters.
 #' @param ... aesthetic mappings to pass to `ggplot2::aes_string()`.
 #'
 #' @return A ggplot object.
@@ -66,7 +67,7 @@ setMethod(
   signature("SpatialExperiment"),
   function(object, pm_cols, targetCells = NA, by_cluster = FALSE,
            show_clusters = as.character(seq(6)), plot_all = FALSE,
-           sample_size = 2, ...) {
+           sample_size = 2, val_name = "clusters", ...) {
     dat <- as.data.frame(colData(object), optional = TRUE)
 
     if (!all(pm_cols %in% colnames(dat))) {
@@ -74,32 +75,32 @@ setMethod(
     }
 
     if (isTRUE(by_cluster)) {
-      if (!("clusters" %in% colnames(dat))) {
+      if (!(val_name %in% colnames(dat))) {
         stop("Cannot find the clusters column in the SpatialExperiment, check column names.")
       }
 
-      if (all(!(show_clusters %in% dat[, "clusters"]))) {
+      if (all(!(show_clusters %in% dat[, val_name]))) {
         stop("Cannot find the show_clusters value in the clusters column.")
       }
 
-      dat <- dat[, c(pm_cols, "clusters")]
+      dat <- dat[, c(pm_cols, val_name)]
 
       dat <- as.data.frame(dat, optional = TRUE) |>
         rownames2col("cells")
       
-      dat <- dat[dat$clusters %in% show_clusters,]
+      dat <- dat[dat[,val_name] %in% show_clusters,]
 
       if (isTRUE(plot_all)) {
-        p <- plotProbDist_box_intl(dat, pm_cols, ...) +
-          facet_wrap(~clusters)
+        p <- plotProbDist_box_intl(dat, pm_cols, val_name, ...) +
+          facet_wrap(as.formula(paste("~", val_name)))
       } else {
         
-        datx <- sample_rows(dat, "clusters", sample_size)
+        datx <- sample_rows(dat, val_name, sample_size)
         
-        datx <- format_dat_pivot(datx, cols2ex = c("cells","clusters"))
+        datx <- format_dat_pivot(datx, cols2ex = c("cells",val_name))
 
         p <- plotProbDist_intl(datx, ...) +
-          facet_wrap(~ clusters + cells, ncol = 4)
+          facet_wrap(as.formula(paste("~", val_name,"+ cells")), ncol = 4)
       }
     } else {
       dat <- dat[, c(pm_cols)]
@@ -154,7 +155,6 @@ format_dat <- function(object, targetCells = NULL, cols2ex = "cells"){
 }
 
 format_dat_pivot <- function(x, cols2ex = "cells"){
-  
   reshaped_dat <- reshape(x, varying = names(x)[!(names(x) %in% cols2ex)],
                           v.names = "probability", timevar = "hoods",
                           times = names(x)[!(names(x) %in% cols2ex)],
@@ -191,7 +191,7 @@ plotProbDist_intl <- function(x, ...) {
   return(p)
 }
 
-plotProbDist_box_intl <- function(x, pm_cols, ...) {
+plotProbDist_box_intl <- function(x, pm_cols, val_name, ...) {
   aesmap <- rlang::enquos(...)
 
   # split aes params into those that are not aes i.e. static parametrisation
@@ -203,7 +203,7 @@ plotProbDist_box_intl <- function(x, pm_cols, ...) {
     defaultmap <- list()
   }
   
-  x <- format_dat_pivot(x, cols2ex = c("cells","clusters"))
+  x <- format_dat_pivot(x, cols2ex = c("cells", val_name))
 
   p <- ggplot2::ggplot(x, aes(x = hoods, y = probability, !!!aesmap))
 
@@ -227,4 +227,4 @@ pm_theme <- function(textScale = 1.1) {
     )
 }
 
-utils::globalVariables(c("cells", "clusters", "hoods", "probability"))
+utils::globalVariables(c("cells", "hoods", "probability"))

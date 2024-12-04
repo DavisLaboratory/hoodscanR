@@ -13,6 +13,7 @@
 #' @importFrom rmarkdown draft
 #' @importFrom stats aggregate 
 #' @importFrom stats reshape
+#' @importFrom stats as.formula
 NULL
 
 #' Method to identify cellular spatial neighbourhood from single cell spatial

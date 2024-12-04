@@ -9,7 +9,7 @@
 #' stored in the colData.
 #' @param algo Algorithm to be used. Options include 
 #' Hartigan-Wong, Lloyd, and MacQueen.
-#' @param val_names Character. Column names used to store the clusters.
+#' @param val_name Character. Column name used to store the clusters.
 #' @param ... Ignore parameter.
 #'
 #' @return A probability matrix or a SpatialExperiment object. For latter,
@@ -52,7 +52,7 @@ setMethod(
   signature("SpatialExperiment"),
   function(object, pm_cols, k = 0,
            iter_max = 1000, nstart = 5,
-           algo = "Hartigan-Wong", val_names = "clusters") {
+           algo = "Hartigan-Wong", val_name = "clusters") {
     dat <- as.data.frame(colData(object), optional = TRUE)
 
     if (!all(pm_cols %in% colnames(dat))) {
@@ -67,7 +67,7 @@ setMethod(
 
     clust <- pmclust_intl(dat, k, iter_max, nstart, algo)
 
-    colData(object)[,val_names] <- as.character(clust$cluster)
+    colData(object)[,val_name] <- as.character(clust$cluster)
     object@metadata$centroids <- clust$centers
 
     return(object)

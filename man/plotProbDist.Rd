@@ -19,6 +19,7 @@ plotProbDist(object, ...)
   show_clusters = as.character(seq(6)),
   plot_all = FALSE,
   sample_size = 2,
+  val_name = "clusters",
   ...
 )
 }
@@ -41,6 +42,8 @@ plot instead of bar plot to show all cells in each cluster.}
 
 \item{sample_size}{Integer. By default is 2, sampling two cell from each
 cluster to be plotted.}
+
+\item{val_name}{Character. Column name used to store the clusters.}
 }
 \value{
 A ggplot object.
