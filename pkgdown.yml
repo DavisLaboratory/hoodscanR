@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   Quick_start: Quick_start.html
-last_built: 2024-08-13T02:22Z
+last_built: 2024-12-05T00:10Z
 urls:
   reference: https://davislaboratory.github.io/hoodscanR/reference
   article: https://davislaboratory.github.io/hoodscanR/articles
