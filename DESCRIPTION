@@ -1,11 +1,11 @@
 Package: hoodscanR
 Title: Spatial cellular neighbourhood scanning in R
-Version: 1.5.1
+Version: 1.5.2
 Authors@R: 
     c(person(given = "Ning",
              family = "Liu",
              role = c("aut", "cre"),
-             email = "liu.n@wehi.edu.au",
+             email = "ning.liu@adelaide.edu.au",
              comment = c(ORCID = "0000-0002-9487-9305")),
       person(given = "Jarryd",
              family = "Martin",
