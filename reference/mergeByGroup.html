@@ -43,7 +43,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mergeByGroup</span><span class="op">(</span><span class="va">pm</span>, <span class="va">group_df</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mergeByGroup</span><span class="op">(</span><span class="va">pm</span>, <span class="va">group_df</span>, continuousAnnotation <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,7 +55,15 @@
 
 
 <dt id="arg-group-df">group_df<a class="anchor" aria-label="anchor" href="#arg-group-df"></a></dt>
-<dd><p>A character matrix. Annotation of the neighboring cells to be used.</p></dd>
+<dd><p>A matrix. If <code>continuousAnnotation = FALSE</code>, it should be a
+character (or factor) matrix of discrete labels matching <code>pm</code>.
+If <code>continuousAnnotation = TRUE</code>, it should be a numeric fuzzy-annotation matrix
+(cells × types), where rows sum to 1.</p></dd>
+
+
+<dt id="arg-continuousannotation">continuousAnnotation<a class="anchor" aria-label="anchor" href="#arg-continuousannotation"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, interprets <code>group_df</code> as fuzzy
+probabilities instead of discrete labels.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -78,6 +86,13 @@ in each cellular neighborhood.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">pm2</span> <span class="op">&lt;-</span> <span class="fu">mergeByGroup</span><span class="op">(</span><span class="va">pm</span>, <span class="va">fnc</span><span class="op">$</span><span class="va">cells</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Fuzzy annotation example:</span></span></span>
+<span class="r-in"><span><span class="co"># Create a 10×3 fuzzy annotation, rows sum to 1</span></span></span>
+<span class="r-in"><span><span class="va">fuzzy_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pm</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fuzzy_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sweep.html" class="external-link">sweep</a></span><span class="op">(</span><span class="va">fuzzy_df</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">fuzzy_df</span><span class="op">)</span>, <span class="st">"/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">fuzzy_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"celltype_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pm_cont</span> <span class="op">&lt;-</span> <span class="fu">mergeByGroup</span><span class="op">(</span><span class="va">pm</span>, <span class="va">fuzzy_df</span>, continuousAnnotation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -89,7 +104,7 @@ in each cellular neighborhood.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
