@@ -9,6 +9,8 @@ plotTissue(
   targetcell = FALSE,
   k_near = 100,
   targetsize = 3,
+  features = NULL,
+  assay = "logcounts",
   targetshape = 1,
   targetcolor = "red",
   scaleFactor = 1,
@@ -26,6 +28,10 @@ the region of a specific cell.}
 the targetcell will be plotted.}
 
 \item{targetsize}{Dot size of the targetcell.}
+
+\item{features}{Vector of characters. Default is NULL. Useful for plotting expression.}
+
+\item{assay}{Character or Integer. To specificy which assay to be used for plotting expression.}
 
 \item{targetshape}{Shape of the targetcell.}
 

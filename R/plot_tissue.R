@@ -6,6 +6,8 @@
 #' @param k_near Optional. If targetcell is specified, the k_near cells around
 #' the targetcell will be plotted.
 #' @param targetsize Dot size of the targetcell.
+#' @param features Vector of characters. Default is NULL. Useful for plotting expression.
+#' @param assay Character or Integer. To specificy which assay to be used for plotting expression.
 #' @param targetshape Shape of the targetcell.
 #' @param targetcolor Colour of the targetcell.
 #' @param scaleFactor Scale factor to align with the image.
@@ -21,7 +23,8 @@
 #'
 #' plotTissue(spe, color = celltypes)
 #'
-plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
+plotTissue <- function(spe, targetcell = FALSE, k_near = 100, 
+                       targetsize = 3, features = NULL, assay = "logcounts",
                        targetshape = 1, targetcolor = "red",
                        scaleFactor = 1, reverseY = TRUE, ...) {
   
@@ -54,6 +57,12 @@ plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
 
   cdata <- as.data.frame(SummarizedExperiment::colData(spe), 
                          optional = TRUE)
+  
+  if(!is.null(features)){
+      if(all(features %in% rownames(spe))){
+          cdata <- cbind(cdata, as.data.frame(t(SummarizedExperiment::assay(spe, "logcounts")[features,])))
+      }
+  }
 
   if ("cell_id" %in% colnames(cdata)) {
     cdata <- cdata[,!(colnames(cdata) %in% "cell_id")]
@@ -83,12 +92,36 @@ plotTissue <- function(spe, targetcell = FALSE, k_near = 100, targetsize = 3,
     final_y <- 2 * mid_y - y_tmp
     toplot[, "y"] <- final_y
   }
+  
+  if(is.null(features)){
+      p <- ggplot2::ggplot(toplot, aes(x = x, y = y, !!!aesmap))
+      
+      p <- p +
+          do.call(ggplot2::geom_point, defaultmap) +
+          tissue_theme()
+  } else {
+      feats_cols <- features[features %in% colnames(toplot)]
+      n <- nrow(toplot)
+      m <- length(feats_cols)
+      
+      expr_vals <- as.numeric(as.matrix(toplot[, feats_cols, drop = FALSE]))
+      long_df <- data.frame(
+          x       = rep(toplot$x, times = m),
+          y       = rep(toplot$y, times = m),
+          cell_id = rep(toplot$cell_id, times = m),
+          feature = factor(rep(feats_cols, each = n), levels = features),
+          expr    = expr_vals,
+          stringsAsFactors = FALSE
+      )
+      p <- ggplot2::ggplot(long_df, ggplot2::aes(x = x, y = y, colour = expr)) +
+          do.call(ggplot2::geom_point, defaultmap) +  
+          ggplot2::facet_wrap(~ feature) +
+          tissue_theme() +
+          ggplot2::scale_color_gradient(low = "gray", high = "red") +
+          ggplot2::labs(colour = paste0(assay, " expression")) 
+  }
 
-  p <- ggplot2::ggplot(toplot, aes(x = x, y = y, !!!aesmap))
-
-  p <- p +
-    do.call(ggplot2::geom_point, defaultmap) +
-    tissue_theme()
+  
 
   if (!is(targetcell, "logical")) {
     target_df <- toplot[toplot$cell_id %in% targetcell,]
