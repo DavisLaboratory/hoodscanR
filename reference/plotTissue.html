@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hoodscanR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,8 @@
 <span>  targetcell <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  k_near <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  targetsize <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  features <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay <span class="op">=</span> <span class="st">"logcounts"</span>,</span>
 <span>  targetshape <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  targetcolor <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>  scaleFactor <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -76,6 +78,14 @@ the targetcell will be plotted.</p></dd>
 
 <dt id="arg-targetsize">targetsize<a class="anchor" aria-label="anchor" href="#arg-targetsize"></a></dt>
 <dd><p>Dot size of the targetcell.</p></dd>
+
+
+<dt id="arg-features">features<a class="anchor" aria-label="anchor" href="#arg-features"></a></dt>
+<dd><p>Vector of characters. Default is NULL. Useful for plotting expression.</p></dd>
+
+
+<dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
+<dd><p>Character or Integer. To specificy which assay to be used for plotting expression.</p></dd>
 
 
 <dt id="arg-targetshape">targetshape<a class="anchor" aria-label="anchor" href="#arg-targetshape"></a></dt>
