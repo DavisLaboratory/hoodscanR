@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   Quick_start: Quick_start.html
-last_built: 2025-08-12T23:11Z
+last_built: 2025-10-23T04:18Z
 urls:
   reference: https://davislaboratory.github.io/hoodscanR/reference
   article: https://davislaboratory.github.io/hoodscanR/articles
