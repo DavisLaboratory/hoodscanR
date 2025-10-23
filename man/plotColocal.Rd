@@ -9,7 +9,12 @@
 \usage{
 plotColocal(object, ...)
 
-\S4method{plotColocal}{matrix}(object, hm_width = 5, hm_height = 5)
+\S4method{plotColocal}{matrix}(
+  object,
+  hm_width = 5,
+  hm_height = 5,
+  title = "Mean probability within groups"
+)
 
 \S4method{plotColocal}{SpatialExperiment}(
   object,
@@ -20,7 +25,8 @@ plotColocal(object, ...)
   hm_height = 5,
   cluster_row = TRUE,
   cluster_col = TRUE,
-  return_matrix = FALSE
+  return_matrix = FALSE,
+  title = "Mean probability within groups"
 )
 }
 \arguments{
@@ -31,6 +37,8 @@ plotColocal(object, ...)
 \item{hm_width}{Integer. The width of heatmap.}
 
 \item{hm_height}{Integer. The height of heatmap.}
+
+\item{title}{Title for the heatmap.}
 
 \item{pm_cols}{The colnames of probability matrix. This is requires for
 SpatialExperiment input. Assuming that the probability is stored in the colData.}
@@ -46,7 +54,7 @@ neighbourhood by group using the by_group parameter.}
 
 \item{cluster_col}{Logical. Cluster columns.}
 
-\item{return_matrix}{Logical. Export a numeric matrix .}
+\item{return_matrix}{Logical. Export a numeric matrix.}
 }
 \value{
 A ComplexHeatmap plot. When return_matrix is set to TRUE,

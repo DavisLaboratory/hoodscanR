@@ -12,7 +12,8 @@
 #' @param hm_height Integer. The height of heatmap.
 #' @param cluster_row Logical. Cluster rows.
 #' @param cluster_col Logical. Cluster columns.
-#' @param return_matrix Logical. Export a numeric matrix .
+#' @param return_matrix Logical. Export a numeric matrix.
+#' @param title Title for the heatmap.
 #' @param ... Ignore parameter.
 #'
 #' @return A ComplexHeatmap plot. When return_matrix is set to TRUE,
@@ -53,9 +54,9 @@ setGeneric(
 setMethod(
   "plotColocal",
   signature("matrix"),
-  function(object, hm_width = 5, hm_height = 5) {
+  function(object, hm_width = 5, hm_height = 5, title = "Mean probability within groups") {
     cor.m <- cor(object)
-    ht <- plotColocal_intl(cor.m, hm_width = hm_width, hm_height = hm_height)
+    ht <- plotColocal_intl(cor.m, hm_width = hm_width, hm_height = hm_height, title = title)
 
     ComplexHeatmap::draw(ht)
   }
@@ -67,7 +68,7 @@ setMethod(
   signature("SpatialExperiment"),
   function(object, pm_cols, self_cor = TRUE, by_group = NULL, hm_width = 5,
            hm_height = 5, cluster_row = TRUE, cluster_col = TRUE,
-           return_matrix = FALSE) {
+           return_matrix = FALSE, title = "Mean probability within groups") {
     dat <- as.data.frame(colData(object), optional = TRUE)
 
     if (!all(pm_cols %in% colnames(dat))) {
@@ -78,7 +79,8 @@ setMethod(
       cor.m <- cor(dat[, pm_cols])
       ht <- plotColocal_intl(cor.m,
         hm_width = hm_width, hm_height = hm_height,
-        cluster_row = cluster_row, cluster_col = cluster_col
+        cluster_row = cluster_row, cluster_col = cluster_col,
+        title = title
       )
     } else {
       if (is.null(by_group) | length(by_group) != 1 | !(by_group %in% colnames(dat))) {
@@ -91,7 +93,7 @@ setMethod(
           col2rownames(by_group) |>
           as.matrix()
         ht <- plotColocal_intl(cor.m,
-          title = "Mean probability within groups", legend.name = "Prob.",
+          title = title, legend.name = "Prob.",
           hm_width = hm_width, hm_height = hm_height, self_cor = FALSE
         )
       }
@@ -119,7 +121,7 @@ mean_by_group <- function(df, group_col) {
 
 
 plotColocal_intl <- function(m, col.pal = NA,
-                             title = "Pearson correlation between neighbourhoods",
+                             title,
                              title.size = 15, legend.name = "Cor.",
                              hm_width, hm_height, self_cor = TRUE,
                              cluster_row = FALSE, cluster_col = FALSE) {
