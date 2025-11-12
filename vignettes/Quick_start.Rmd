@@ -22,6 +22,7 @@ vignette: >
 }
 </style>
 ```
+
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, dpi = 80)
 suppressWarnings(library(ggplot2))
@@ -54,6 +55,12 @@ devtools::install_github("DavisLaboratory/hoodscanR")
 # Quick start
 
 ```{r}
+suppressPackageStartupMessages({
+  library(SummarizedExperiment)
+  library(SingleCellExperiment)
+  library(SpatialExperiment)
+})
+
 library(hoodscanR)
 library(SpatialExperiment)
 library(scico)
